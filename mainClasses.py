@@ -7,10 +7,8 @@ class ActivationFunction:
 
 class Sigmoid(ActivationFunction):
     def activate(self, inputValue):
-        if inputValue > 0.5:
-            return 1
-        else:
-            return 0
+        return 1 / (1 + np.exp(-inputValue))
+
 
 class Same(ActivationFunction):
     def activate(self, inputValue):
@@ -26,7 +24,7 @@ class Neuron:
     
 
 class Layer:
-    def __init__(self, inputSize, size, activation = Same()):
+    def __init__(self, inputSize, size, activation = Sigmoid()):
         """dasdasda
 
         Keyword arguments:
@@ -59,11 +57,24 @@ class Layer:
 
     def forwardPropagation(self, inputData):
         print("Weights shape: ", self.weights.shape)
-        print("Input size: ", len(inputData))
-        self.output = np.dot(self.weights.T, inputData) + self.biases
+        print("Weights:", self.weights.T)
+        print("Biases:", self.biases, self.biases.shape)
+        print("Input^T: ", inputData.T, inputData.T.shape)
+        # print("Rs", np.dot(self.weights.T, inputData.T) + self.biases.T)
+        # np.dot(self.weights.T, inputData.T) + self.biases.T) 
+        # and np.dot(inputData, self.weights) + self.biases are the same
+        self.output = np.dot(inputData, self.weights) + self.biases
 
     def getOutput(self):
-        return [self.activation.activate(sum(x)) for x in self.output]
+        print("Result:", self.output)
+        activatedOutput = self.activation.activate(self.output)
+        print("Activated result:", activatedOutput)
+        return activatedOutput
+        normalList = []
+        for x in activatedOutput:
+            for i in x:
+             normalList.append(i)
+        return normalList
 
 
 class Network:
@@ -72,7 +83,7 @@ class Network:
 
     def feedForward(self, inputData):
         # Check that the input size is the same as layers[0]
-        if len(inputData) != self.layers[0].getInputSize():
+        if inputData.shape[1] != self.layers[0].getInputSize():
             errorStr = ('Input size: ' + str(len(inputData)) + 
                        ' != first layer size: ' + str(self.layers[0].getInputSize()))
             raise ValueError(errorStr)
@@ -80,7 +91,7 @@ class Network:
         nextInput = inputData
         i = 0
         for layer in self.layers:
-            print('Layer', i)
+            print("--------- Layer", i, "-------------")
             layer.forwardPropagation(nextInput)
             nextInput = layer.getOutput()
             print("Output of the layer: ", nextInput)
