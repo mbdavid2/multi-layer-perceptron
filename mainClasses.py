@@ -25,12 +25,14 @@ class Neuron:
 
 class Layer:
     def __init__(self, inputSize, size, activation = Sigmoid()):
-        """dasdasda
+        """Layer constructor, creates the appropriate weight
+        and bias matrices based on the layer size and expected
+        input size
 
         Keyword arguments:
         inputSize -- expected input size
-        size -- number of neurons
-        activationFunc -- activation function
+        size -- number of neurons of the layer
+        activationFunc -- activation function (Sigmoid by default)
         """
         self.inputSize = inputSize
         self.size = size
@@ -56,43 +58,49 @@ class Layer:
 
 
     def forwardPropagation(self, inputData):
-        print("Weights shape: ", self.weights.shape)
-        print("Weights:", self.weights.T)
-        print("Biases:", self.biases, self.biases.shape)
         print("Input^T: ", inputData.T, inputData.T.shape)
+        print("Input^T shape:", inputData.T.shape)
+        print("Weights shape: ", self.weights.shape)
+        print("Weights^T:", self.weights.T)
+        print("Biases:", self.biases, self.biases.shape)
         # print("Rs", np.dot(self.weights.T, inputData.T) + self.biases.T)
         # np.dot(self.weights.T, inputData.T) + self.biases.T) 
         # and np.dot(inputData, self.weights) + self.biases are the same
         self.output = np.dot(inputData, self.weights) + self.biases
 
     def getOutput(self):
-        print("Result:", self.output)
+        print("Result:", self.output, self.output.shape)
         activatedOutput = self.activation.activate(self.output)
-        print("Activated result:", activatedOutput)
         return activatedOutput
-        normalList = []
-        for x in activatedOutput:
-            for i in x:
-             normalList.append(i)
-        return normalList
 
 
 class Network:
     def __init__(self, layers):
         self.layers = layers
 
-    def feedForward(self, inputData):
+    def checkDimensions(self, inputData, layer, layerN):
         # Check that the input size is the same as layers[0]
-        if inputData.shape[1] != self.layers[0].getInputSize():
-            errorStr = ('Input size: ' + str(len(inputData)) + 
-                       ' != first layer size: ' + str(self.layers[0].getInputSize()))
+        if inputData.shape[1] != layer.getInputSize():
+            errorStr = ('Stopped at Layer(' + str(layerN) + ') -> Incoming input size: ' 
+                        + str(inputData.shape[1]) + ' != ' + str(layer.getInputSize()) + 
+                       ' (Layer(' + str(layerN) + ') expected input size)')
             raise ValueError(errorStr)
 
+    def softMax(self, outputValues):
+        expValues = [np.e**x for x in outputValues[0]]
+        total = sum(expValues)
+        normValues = [x/total for x in expValues]
+        return normValues
+
+
+    def feedForward(self, inputData):
         nextInput = inputData
-        i = 0
-        for layer in self.layers:
+        for i, layer in enumerate(self.layers):
+            self.checkDimensions(nextInput, layer, i)
             print("--------- Layer", i, "-------------")
             layer.forwardPropagation(nextInput)
             nextInput = layer.getOutput()
-            print("Output of the layer: ", nextInput)
-            i = i + 1
+            print("Layer output (activated): ", nextInput, nextInput.shape)
+
+        output = nextInput
+        print("Output (Softmax):", self.softMax(output))

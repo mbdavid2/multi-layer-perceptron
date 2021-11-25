@@ -32,12 +32,13 @@ import mainClasses as mlp
 # for neuron in neurons:
 #     print(neuron.activate(3))
 
-hiddenLayer = mlp.Layer(3, 4)
-hiddenLayer2 = mlp.Layer(4, 2)
+hiddenLayer = mlp.Layer(2, 3)
+# hiddenLayer2 = mlp.Layer(5, 4)
+outputLayer = mlp.Layer(3, 2)
 # outputLayer = mlp.Layer(hiddenLayer.getLayerSize(), 3)
 
-inputData = np.array([[1, 2, 3]])
-network = mlp.Network([hiddenLayer, hiddenLayer2])
+inputData = np.array([[1, 2]])
+network = mlp.Network([hiddenLayer, outputLayer])
 network.feedForward(inputData)
 
 # layer.forwardPropagation(inputs)
