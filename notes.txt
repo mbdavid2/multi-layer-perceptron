@@ -1,0 +1,66 @@
+https://www.youtube.com/watch?v=tIeHLnjs5U8
+
+For a simple layer operation, we have the activated unit aL, obtained from zL, which is the combination of wL, a(L-1) and bL: 
+
+zL = wL*a(L-1) + bL
+aL = sigmoid(zL) (for example)
+
+Then C, the cost function, is C = (aL - y)^2, for example. 
+
+The "order" of all of this is: (wL, a(L-1), bL) -> zL -> aL -> C
+
+More "graphically":
+
+
+wL  a(L-1)  bL
+\     |     /
+ \    |    /
+  \   |   / 
+   \  |  /
+    \ | /
+      zL
+      |
+      |
+   y  aL
+   \  |
+    \ |
+     \|
+      C
+
+
+We want to know ∂C/∂wL, that is, how much does the weight wL influence the cost function, therefore the chain rule computes this as follows:
+
+∂C/∂wL = ∂zL/∂wL*∂aL/∂zL*∂C/∂aL
+
+How much wL influences the cost function depends on the order we've seen, instead of just wL -> C we want to see all of the things between the two, that's what the chain rule is: how much wL influences zL, and then how much zL influences aL, and finally how much aL influences C.
+
+Let's compute them separately:
+
+∂C/∂aL = 2(aL - y) (remember C = (aL - y)^2) (or the 2 goes away if we're using 1/2 as error!)
+
+∂aL/∂zL = simply the derivative of our activation function
+
+∂zL/∂wL = a(L-1), how much does the weight influence z, depends on how strong the previous activation is
+
+---------------
+
+The sensitivity to the bias for example is one simple change (∂zL/∂bL instead of ∂zL/∂wL):
+
+∂C/∂bL = ∂zL/∂bL*∂aL/∂zL*∂C/∂aL
+
+∂zL/∂bL = bL (because zL = wL*a(L-1) + bL, so what's not bL is a constant)
+
+---------------
+
+And for the activation:
+
+∂C/∂a(L-1) = ∂zL/∂a(L-1)*∂aL/∂zL*∂C/∂aL, now we'll have the same but with one change:
+
+∂zL/∂a(L-1) = wL (because zL = wL*a(L-1) + bL, so b is a constant and the a is like an x)
+
+---------------
+
+Now we can just keep iterating the same chain rule idea backwards
+
+
+THIS IS A VERY SIMPLE EXPLANATION FOR THIS CASE WITH ONLY ONE NEURON, if there's more then each activation function influences multiple neurons on the next layer, look at the video for extra info.
