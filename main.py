@@ -41,4 +41,5 @@ inputData = np.array([[0.05, 0.10]])
 desiredOutput = np.array([[0.01, 0.99]])
 network = mlp.Network([hiddenLayer, outputLayer])
 # network.feedForward(inputData)
-network.train(inputData, desiredOutput)
+for i in range(0, 100):
+    network.train(inputData, desiredOutput)

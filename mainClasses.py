@@ -37,7 +37,7 @@ class Layer:
         self.inputSize = inputSize
         self.size = size
         self.neurons = []
-        self.activation = activation
+        self.activation = activation 
 
         sigmoid = ActivationFunction()
         for i in range(0, self.size):
@@ -56,6 +56,17 @@ class Layer:
 
         # self.biases = np.random.rand(1, self.size)
 
+    def prepareNewWeights(self, newWeights):
+        self.newWeights = newWeights
+
+    def applyNewWeights(self):
+        # Internally here, the weights are not transposed
+        # print("Old weights")
+        # print(self.weights.T)
+        self.weights = self.newWeights.T
+
+        # print("New weights")
+        # print(self.newWeights)
 
     def getInputSize(self):
         return self.inputSize
@@ -141,6 +152,7 @@ class Network:
             print()
 
         # output = nextInput
+        print('Feedforward output:', nextInput)
         return allOutputs
         # softMaxRes = self.softMaxBatch(output)
         # print("Output (Softmax):", softMaxRes.shape)
@@ -197,12 +209,13 @@ class Network:
                 # w' = w - eta*∂C/∂w | ∂C/∂w = ∂z/∂w*(∂a/∂z*∂C/∂a), (∂a/∂z*∂C/∂a) = partialDelta
                 weights[i, j] = weights[i, j] - learningRate*(neuronPrev*partialDeltas[i, j])
 
-        print("Delta weights output layer:")
+        print("New weights output layer:")
         print(weights)
+        layer.prepareNewWeights(weights)
         return partialDeltas
 
 
-    def computeWeights(self, outputPrev, output, target, layer, nextLayer, partialDeltas, learningRate = 0.5):
+    def computeWeights(self, outputPrev, output, layer, nextLayer, partialDeltas, learningRate = 0.5):
         eta = learningRate
         weights = layer.getWeightsCopy().T
         nextWeightsRef = nextLayer.weights.T
@@ -231,7 +244,9 @@ class Network:
                 # We need: ∂C/∂w = ∂z/∂w*∂a/∂z*∂C/∂a = ∂z/∂w*∂a/∂z*total. Store ∂a/∂z*total for later
                 newPartialDeltas[i, j] = total*neuron*(1 - neuron)
                 weights[i, j] = weights[i, j] - eta*newPartialDeltas[i, j]*neuronPrev
-        print("Delta weights:", weights)
+        print("New weights:")
+        print(weights)
+        layer.prepareNewWeights(weights)
         return newPartialDeltas
 
     
@@ -241,12 +256,13 @@ class Network:
             raise ValueError(errorStr)
         
         # Propagate the input forward
-        self.feedForward(inputData)
+        allOutputs = self.feedForward(inputData)
         
-        # print('Feedforward output:', outputs[-1])
         print('Target:', target)
-
+        totalCost = 0
         for j in range(0, len(inputData)):
+            squaredError = self.computeError(allOutputs[-1][j], target[j])
+            totalCost = totalCost + squaredError
             for i in range(self.nLayers - 1, -1, -1):
                 print()
                 print("--------- Backpropagation Layer", str(i) + "/" + str(self.nLayers-1), "-------------")
@@ -262,9 +278,24 @@ class Network:
                 if i == self.nLayers - 1:
                     partialDeltas = self.computeWeightsOutputLayer(outputPrev, output, target[j], layer)
                 else:
-                    partialDeltas = self.computeWeights(outputPrev, output, target[j], layer, self.layers[i+1], partialDeltas)
+                    partialDeltas = self.computeWeights(outputPrev, output, layer, self.layers[i+1], partialDeltas)
 
+        print('Total cost:', totalCost)
 
+        # Apply the new weights
+        print('Applying new weights...')
+        for layer in self.layers:
+            layer.applyNewWeights()
+        
+        print('Running feedforward again...')
+        allOutputs = self.feedForward(inputData)
+
+        # Compute new error
+        totalCost = 0
+        for j in range(0, len(inputData)):
+            squaredError = self.computeError(allOutputs[-1][j], target[j])
+            totalCost = totalCost + squaredError
+        print('New total cost:', totalCost)
 
 
         # for i, x in enumerate(outputs):
@@ -280,4 +311,4 @@ class Network:
         #     print()
         # ## totalCost should be averaged???
 
-        # print('Total cost:', totalCost)
+        
