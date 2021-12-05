@@ -39,9 +39,14 @@ hiddenLayer = Layer.Layer(2, 2, True)
 outputLayer = Layer.Layer(2, 2, False)
 # outputLayer = mlp.Layer(hiddenLayer.getLayerSize(), 3)
 
+inputData = np.array([[0, 0]]) #, [0, 1], [1, 0], [1, 1]])
+desiredOutput = np.array([[0]]) #, [1], [1], [0]])
+
 inputData = np.array([[0.05, 0.10]])
 desiredOutput = np.array([[0.01, 0.99]])
+
 network = Network.Network([hiddenLayer, outputLayer])
 # network.feedForward(inputData)
-for i in range(0, 1000):
+for i in range(0, 10001):
+    print("--------------- Iteration", i, "---------------")
     network.train(inputData, desiredOutput)

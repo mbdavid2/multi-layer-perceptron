@@ -1,9 +1,10 @@
 import numpy as np
 
 class Network:
-    def __init__(self, layers):
+    def __init__(self, layers, learningRate = 0.5):
         self.layers = layers
         self.nLayers = len(layers)
+        self.learningRate = learningRate
 
     def checkDimensions(self, inputData, layer, layerN):
         # Check that the input size is the same as layers[0]
@@ -56,9 +57,8 @@ class Network:
         # print(softMaxRes)
 
     def computeError(self, networkOutput, target):
-        # SquaredErrors will be the array with the 
-        # errors for each output neuron against the 
-        # desired
+        # SquaredErrors will be the array with the errors 
+        # for each output neuron against the desired
         squaredErrors = (1/2)*np.power(target - networkOutput, 2)
         return sum(squaredErrors)
 
@@ -69,8 +69,7 @@ class Network:
     #       f(x) = 1/(1+e^-x), then f'(x) = f(x)(1-f(x))
     # ∂z/∂w = a_prev (previous activated output)
     #       = w*a_prev (this one) + w*a_prev (other weights) + b = a_prev + 0 + 0
-
-    def computeWeightsOutputLayer(self, outputPrev, output, target, layer, learningRate = 0.25):
+    def computeWeightsOutputLayer(self, outputPrev, output, target, layer):
         # C = total error (C_0 + C_1 + ... C_n), a = activated output
         # z = raw output, w = weight
         # ∂C/∂w = ∂z/∂w*∂a/∂z*∂C/∂a
@@ -81,23 +80,29 @@ class Network:
         print(outputPrev)
 
         weights = layer.getWeightsCopy().T
-        partialDeltas = np.zeros(weights.shape)
-        for i, neuron in enumerate(output):
-            for j, neuronPrev in enumerate(outputPrev):
+        partialDeltas = np.zeros(weights.T.shape)
+        for i, neuronPrev in enumerate(outputPrev):
+            for j, neuron in enumerate(output):
+                # print("-----")
+                # print("Doing weight:", i, j, weights[i, j])
                 # We need: ∂z/∂w*∂a/∂z*∂C/∂a. Store ∂a/∂z*∂C/∂a for later
-                partialDeltas[i, j] = -(target[i] - neuron)*neuron*(1 - neuron)
-
+                partialDeltas[i, j] = -(target[j] - neuron)*neuron*(1 - neuron)
+                # print("-(target[j] - neuron)", -(target[j] - neuron))
+                # print("neuron*(1 - neuron)", neuron*(1 - neuron))
+                # print("neuronPrev", neuronPrev)
+                # print("neuron", neuron)
+                # print("target", target[j])
+                # print(neuronPrev*partialDeltas[i, j], -(target[j] - neuron)*neuronPrev*neuron*(1 - neuron))
                 # w' = w - eta*∂C/∂w | ∂C/∂w = ∂z/∂w*(∂a/∂z*∂C/∂a), (∂a/∂z*∂C/∂a) = partialDelta
-                weights[i, j] = weights[i, j] - learningRate*(neuronPrev*partialDeltas[i, j])
-
+                weights[i, j] = weights[i, j] - self.learningRate*(neuronPrev*partialDeltas[i, j])
+                # print("new weight:", weights[i, j])
         print("New weights output layer:")
         print(weights)
         layer.prepareNewWeights(weights)
         return partialDeltas
 
 
-    def computeWeights(self, outputPrev, output, layer, nextLayer, partialDeltas, learningRate = 0.25):
-        eta = learningRate
+    def computeWeights(self, outputPrev, output, layer, nextLayer, partialDeltas):
         weights = layer.getWeightsCopy().T
         nextWeightsRef = nextLayer.weights.T
         print("Output:", output.shape[0])
@@ -109,22 +114,22 @@ class Network:
         print("Weights")
         print(weights)
 
-        newPartialDeltas = np.zeros(weights.shape)
+        newPartialDeltas = np.zeros(weights.T.shape)
 
-        for i, neuron in enumerate(output):
-            for j, neuronPrev in enumerate(outputPrev):
+        for i, neuronPrev in enumerate(outputPrev):
+            for j, neuron in enumerate(output):
                 # ∂C/∂w = ∂z/∂w*∂a/∂z*∂C/∂a
                 # ∂C/∂a = "total" = ∂C/∂a = ∂C_0/∂a + ... + ∂C_n/∂a
                 total = 0
-                for t, neuron in enumerate(output):
+                for t, neuron2 in enumerate(output):
                     # The neuron affects multiple neurons on the next layer
                     # ∂C_i/∂a = ∂C_i/∂z*∂z/∂a = a*b, index with t instead of i for the output
-                    a = partialDeltas[t, j] # a = ∂C_i/∂z = ∂C_i/∂a*∂a/∂z, already computed
-                    b = nextWeightsRef[t, j] # b = ∂z/∂a = w]
+                    a = partialDeltas[j, t] # a = ∂C_i/∂z = ∂C_i/∂a*∂a/∂z, already computed
+                    b = nextWeightsRef[j, t] # b = ∂z/∂a = w]
                     total = total + a*b
                 # We need: ∂C/∂w = ∂z/∂w*∂a/∂z*∂C/∂a = ∂z/∂w*∂a/∂z*total. Store ∂a/∂z*total for later
                 newPartialDeltas[i, j] = total*neuron*(1 - neuron)
-                weights[i, j] = weights[i, j] - eta*newPartialDeltas[i, j]*neuronPrev
+                weights[i, j] = weights[i, j] - self.learningRate*newPartialDeltas[i, j]*neuronPrev
         print("New weights:")
         print(weights)
         layer.prepareNewWeights(weights)
@@ -136,19 +141,24 @@ class Network:
             errorStr = 'Input and output differ in size'
             raise ValueError(errorStr)
         
-        # Propagate the input forward
-        allOutputs = self.feedForward(inputData)
-        
         print('Target:', target)
         totalCost = 0
+
+        # Propagate the input forward, get the outputs (also stored inside each layer)
+        allOutputs = self.feedForward(inputData)
+
         for j in range(0, len(inputData)):
+            # Compute the squared error with the last (-1, output layer) for the input case we're treating (j)
             squaredError = self.computeError(allOutputs[-1][j], target[j])
             totalCost = totalCost + squaredError
+
             for i in range(self.nLayers - 1, -1, -1):
                 print()
                 print("--------- Backpropagation Layer", str(i) + "/" + str(self.nLayers-1), "-------------")
                 layer = self.layers[i]
                 output = layer.getOutput()[j]
+                # print(layer.getOutput())
+                # exit(0)
 
                 if i == 0:
                     outputPrev = inputData[j]
@@ -160,13 +170,15 @@ class Network:
                     partialDeltas = self.computeWeightsOutputLayer(outputPrev, output, target[j], layer)
                 else:
                     partialDeltas = self.computeWeights(outputPrev, output, layer, self.layers[i+1], partialDeltas)
+            
+            # Apply the new weights for this input case
+            print('Applying new weights...')
+            for layer in self.layers:
+                layer.applyNewWeights()
 
         print('Total cost:', totalCost)
 
-        # Apply the new weights
-        print('Applying new weights...')
-        for layer in self.layers:
-            layer.applyNewWeights()
+
         
         print('Running feedforward again...')
         allOutputs = self.feedForward(inputData)

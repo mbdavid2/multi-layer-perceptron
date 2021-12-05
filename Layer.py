@@ -26,13 +26,12 @@ class Layer:
         # np.random.seed(0)
         # self.weights = np.random.rand(self.inputSize, self.size)
         if hard == True:
-            self.weights = np.array([[0.15, 0.2],[0.25, 0.30]]).T
+            self.weights = np.array([[0.15, 0.25],[0.2, 0.30]]).T
             self.biases = np.array([[0.35, 0.35]])
         else:
-            self.weights = np.array([[0.40, 0.45],[0.50, 0.55]]).T
+            self.weights = np.array([[0.40, 0.50],[0.45, 0.55]]).T
             self.biases = np.array([[0.60, 0.60]])
         # np.random.seed(0)
-
         # self.biases = np.random.rand(1, self.size)
 
     def prepareNewWeights(self, newWeights):
@@ -72,7 +71,7 @@ class Layer:
         # print("Rs", np.dot(self.weights.T, inputData.T) + self.biases.T)
         # np.dot(self.weights.T, inputData.T) + self.biases.T) 
         # and np.dot(inputData, self.weights) + self.biases are the same
-        self.rawOutput = np.dot(inputData, self.weights) + self.biases
+        self.rawOutput = np.dot(inputData, self.weights.T) + self.biases
         print("Ouput before activation:", self.rawOutput.shape)
         print(self.rawOutput)
         print()
