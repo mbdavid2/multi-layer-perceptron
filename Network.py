@@ -1,7 +1,7 @@
 import numpy as np
 
 class Network:
-    def __init__(self, layers, learningRate = 0.5):
+    def __init__(self, layers, learningRate = 0.7):
         self.layers = layers
         self.nLayers = len(layers)
         self.learningRate = learningRate
@@ -45,12 +45,12 @@ class Network:
             layer.forwardPropagation(nextInput)
             nextInput = layer.getOutput()
             allOutputs.append(nextInput)
-            print("Layer output (activated): ", nextInput.shape)
-            print(nextInput)
-            print()
+            # print("Layer output (activated): ", nextInput.shape)
+            # print(nextInput)
+            # print()
 
         # output = nextInput
-        print('Feedforward output:', nextInput)
+        # print('Feedforward output:', nextInput)
         return allOutputs
         # softMaxRes = self.softMaxBatch(output)
         # print("Output (Softmax):", softMaxRes.shape)
@@ -73,14 +73,16 @@ class Network:
         # C = total error (C_0 + C_1 + ... C_n), a = activated output
         # z = raw output, w = weight
         # ∂C/∂w = ∂z/∂w*∂a/∂z*∂C/∂a
-        print("Output:", output.shape[0])
-        print(output)
+        # print("Output:", output.shape[0])
+        # print(output)
 
-        print("Prev. Output:", outputPrev.shape[0])
-        print(outputPrev)
+        # print("Prev. Output:", outputPrev.shape[0])
+        # print(outputPrev)
 
-        weights = layer.getWeightsCopy().T
-        partialDeltas = np.zeros(weights.T.shape)
+        weights = layer.getWeightsCopy()
+        partialDeltas = np.zeros(weights.shape)
+        # print("Weights.T")
+        # print(weights)
         for i, neuronPrev in enumerate(outputPrev):
             for j, neuron in enumerate(output):
                 # print("-----")
@@ -95,37 +97,53 @@ class Network:
                 # print(neuronPrev*partialDeltas[i, j], -(target[j] - neuron)*neuronPrev*neuron*(1 - neuron))
                 # w' = w - eta*∂C/∂w | ∂C/∂w = ∂z/∂w*(∂a/∂z*∂C/∂a), (∂a/∂z*∂C/∂a) = partialDelta
                 weights[i, j] = weights[i, j] - self.learningRate*(neuronPrev*partialDeltas[i, j])
-                # print("new weight:", weights[i, j])
-        print("New weights output layer:")
-        print(weights)
+        #         print("new weight:", weights[i, j])
+        # print("New weights output layer:")
+        # print(weights)
+        # print("deltas")
+        # print(partialDeltas)
         layer.prepareNewWeights(weights)
         return partialDeltas
 
 
     def computeWeights(self, outputPrev, output, layer, nextLayer, partialDeltas):
-        weights = layer.getWeightsCopy().T
-        nextWeightsRef = nextLayer.weights.T
-        print("Output:", output.shape[0])
-        print(output)
+        weights = layer.getWeightsCopy()
+        nextWeightsRef = nextLayer.weights
+        # print("Output:", output.shape[0])
+        # print(output)
 
-        print("Prev. Output:", outputPrev.shape[0])
-        print(outputPrev)
+        # print("Prev. Output:", outputPrev.shape[0])
+        # print(outputPrev)
 
-        print("Weights")
-        print(weights)
+        # print("Weights")
+        # print(weights)
 
-        newPartialDeltas = np.zeros(weights.T.shape)
+        # print("given deltas")
+        # print(partialDeltas.shape)
+
+        # print("prev weights")
+        # print(nextWeightsRef)
+
+        newPartialDeltas = np.zeros(weights.shape)
 
         for i, neuronPrev in enumerate(outputPrev):
             for j, neuron in enumerate(output):
+                # print("-----")
+                # print("Doing weight:", i, j, weights[i, j])
+                # print("neuronPrev", neuronPrev)
+                # print("neuron", neuron)
+                # print("target", target[j])
                 # ∂C/∂w = ∂z/∂w*∂a/∂z*∂C/∂a
                 # ∂C/∂a = "total" = ∂C/∂a = ∂C_0/∂a + ... + ∂C_n/∂a
                 total = 0
-                for t, neuron2 in enumerate(output):
+                for t in range(0, partialDeltas.shape[1]):
+                    # print("accessing", j, t)
                     # The neuron affects multiple neurons on the next layer
                     # ∂C_i/∂a = ∂C_i/∂z*∂z/∂a = a*b, index with t instead of i for the output
                     a = partialDeltas[j, t] # a = ∂C_i/∂z = ∂C_i/∂a*∂a/∂z, already computed
                     b = nextWeightsRef[j, t] # b = ∂z/∂a = w]
+                    # print("accessing", j, t, "B:", b)
+                    # a = 1
                     total = total + a*b
                 # We need: ∂C/∂w = ∂z/∂w*∂a/∂z*∂C/∂a = ∂z/∂w*∂a/∂z*total. Store ∂a/∂z*total for later
                 newPartialDeltas[i, j] = total*neuron*(1 - neuron)
@@ -134,6 +152,19 @@ class Network:
         print(weights)
         layer.prepareNewWeights(weights)
         return newPartialDeltas
+
+    def test(self, inputData, target):   
+        print('Running feedforward...')
+        allOutputs = self.feedForward(inputData)
+
+        # Compute new error
+        totalCost = 0
+        for j in range(0, len(inputData)):
+            squaredError = self.computeError(allOutputs[-1][j], target[j])
+            totalCost = totalCost + squaredError
+        
+        print('Feedforward output:', allOutputs[-1])
+        print('Total cost:', totalCost)
 
     
     def train(self, inputData, target):
@@ -178,30 +209,5 @@ class Network:
 
         print('Total cost:', totalCost)
 
-
-        
-        print('Running feedforward again...')
-        allOutputs = self.feedForward(inputData)
-
-        # Compute new error
-        totalCost = 0
-        for j in range(0, len(inputData)):
-            squaredError = self.computeError(allOutputs[-1][j], target[j])
-            totalCost = totalCost + squaredError
-        print('New total cost:', totalCost)
-
-
-        # for i, x in enumerate(outputs):
-        #     if i == len(outputs) - 1:
-        #         self.computeWeightsOutputLayer(outputs[i-1][0], x[0], target, self.layers[i-1])
-        #     elif i != 0:
-        #         # print("now", x)
-        #         # print("previous layer", outputs[i-1])
-        #         # squaredError = self.computeError(x, target[i])
-        #         # totalCost = totalCost + squaredError
-        #         # self.computeWeights(outputs[-2][i], x, target[i])
-        #         self.computeWeights(outputs[i-1][0], x[0], target, self.layers[i-1], self.layers[i])
-        #     print()
-        # ## totalCost should be averaged???
 
         

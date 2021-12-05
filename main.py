@@ -34,19 +34,21 @@ import Network
 # for neuron in neurons:
 #     print(neuron.activate(3))
 
-hiddenLayer = Layer.Layer(2, 2, True)
+hiddenLayer = Layer.Layer(2, 7, True)
 # hiddenLayer2 = mlp.Layer(3, 3)
-outputLayer = Layer.Layer(2, 2, False)
+outputLayer = Layer.Layer(7, 1, False)
 # outputLayer = mlp.Layer(hiddenLayer.getLayerSize(), 3)
 
-inputData = np.array([[0, 0]]) #, [0, 1], [1, 0], [1, 1]])
-desiredOutput = np.array([[0]]) #, [1], [1], [0]])
+inputData = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+desiredOutput = np.array([[0], [1], [1], [0]])
 
-inputData = np.array([[0.05, 0.10]])
-desiredOutput = np.array([[0.01, 0.99]])
+# inputData = np.array([[0.05, 0.10]])
+# desiredOutput = np.array([[0.01, 0.99]])
 
 network = Network.Network([hiddenLayer, outputLayer])
 # network.feedForward(inputData)
-for i in range(0, 10001):
+for i in range(0, 2000):
     print("--------------- Iteration", i, "---------------")
     network.train(inputData, desiredOutput)
+
+network.test(inputData, desiredOutput)
