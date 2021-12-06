@@ -1,7 +1,7 @@
 import numpy as np
 
 class Network:
-    def __init__(self, layers, learningRate = 0.7):
+    def __init__(self, layers, learningRate = 0.9):
         self.layers = layers
         self.nLayers = len(layers)
         self.learningRate = learningRate
@@ -44,6 +44,8 @@ class Network:
             print("--------- Feedforward Layer", str(i) + "/" + str(self.nLayers-1), "-------------")
             layer.forwardPropagation(nextInput)
             nextInput = layer.getOutput()
+            # if i == len(self.layers)-1:
+            #     nextInput = self.softMax(nextInput)
             allOutputs.append(nextInput)
             # print("Layer output (activated): ", nextInput.shape)
             # print(nextInput)
@@ -59,6 +61,11 @@ class Network:
     def computeError(self, networkOutput, target):
         # SquaredErrors will be the array with the errors 
         # for each output neuron against the desired
+        # print("My output")
+        # print(networkOutput)
+
+        # print("Tarrget")
+        # print(target)
         squaredErrors = (1/2)*np.power(target - networkOutput, 2)
         return sum(squaredErrors)
 
@@ -148,8 +155,8 @@ class Network:
                 # We need: ∂C/∂w = ∂z/∂w*∂a/∂z*∂C/∂a = ∂z/∂w*∂a/∂z*total. Store ∂a/∂z*total for later
                 newPartialDeltas[i, j] = total*neuron*(1 - neuron)
                 weights[i, j] = weights[i, j] - self.learningRate*newPartialDeltas[i, j]*neuronPrev
-        print("New weights:")
-        print(weights)
+        # print("New weights:")
+        # print(weights)
         layer.prepareNewWeights(weights)
         return newPartialDeltas
 
@@ -165,6 +172,7 @@ class Network:
         
         print('Feedforward output:', allOutputs[-1])
         print('Total cost:', totalCost)
+        return allOutputs[-1]
 
     
     def train(self, inputData, target):
@@ -177,6 +185,8 @@ class Network:
 
         # Propagate the input forward, get the outputs (also stored inside each layer)
         allOutputs = self.feedForward(inputData)
+        print('Output softmax', allOutputs[-1])
+
 
         for j in range(0, len(inputData)):
             # Compute the squared error with the last (-1, output layer) for the input case we're treating (j)
@@ -184,8 +194,8 @@ class Network:
             totalCost = totalCost + squaredError
 
             for i in range(self.nLayers - 1, -1, -1):
-                print()
-                print("--------- Backpropagation Layer", str(i) + "/" + str(self.nLayers-1), "-------------")
+                # print()
+                # print("--------- Backpropagation Layer", str(i) + "/" + str(self.nLayers-1), "-------------")
                 layer = self.layers[i]
                 output = layer.getOutput()[j]
                 # print(layer.getOutput())
@@ -203,9 +213,11 @@ class Network:
                     partialDeltas = self.computeWeights(outputPrev, output, layer, self.layers[i+1], partialDeltas)
             
             # Apply the new weights for this input case
-            print('Applying new weights...')
+            # print('Applying new weights...')
             for layer in self.layers:
                 layer.applyNewWeights()
+            
+            print('Cost for last input:', squaredError)
 
         print('Total cost:', totalCost)
 
