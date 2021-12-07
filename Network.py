@@ -1,7 +1,8 @@
 import numpy as np
+import logging
 
 class Network:
-    def __init__(self, layers, learningRate = 1):
+    def __init__(self, layers, learningRate = 0.001):
         self.layers = layers
         self.nLayers = len(layers)
         self.learningRate = learningRate
@@ -49,8 +50,8 @@ class Network:
         allOutputs = [inputData]
         for i, layer in enumerate(self.layers):
             self.checkDimensions(nextInput, layer, i)
-            # print()
-            # print("--------- Feedforward Layer", str(i) + "/" + str(self.nLayers-1), "-------------")
+            logging.debug("")
+            logging.debug("--------- Feedforward Layer " + str(i) + "/" + str(self.nLayers-1) + str("-------------"))
             layer.forwardPropagation(nextInput)
             nextInput = layer.getOutput()
             # if i == len(self.layers)-1:
@@ -63,18 +64,10 @@ class Network:
         # output = nextInput
         # print('Feedforward output:', nextInput)
         return allOutputs
-        # softMaxRes = self.softMaxBatch(output)
-        # print("Output (Softmax):", softMaxRes.shape)
-        # print(softMaxRes)
 
     def computeError(self, networkOutput, target):
         # SquaredErrors will be the array with the errors 
         # for each output neuron against the desired
-        # print("My output")
-        # print(networkOutput)
-
-        # print("Tarrget")
-        # print(target)
         squaredErrors = (1/2)*np.power(target - networkOutput, 2)
         return sum(squaredErrors)
 
@@ -114,8 +107,8 @@ class Network:
                 # w' = w - eta*∂C/∂w | ∂C/∂w = ∂z/∂w*(∂a/∂z*∂C/∂a), (∂a/∂z*∂C/∂a) = partialDelta
                 weights[i, j] = weights[i, j] - self.learningRate*(neuronPrev*partialDeltas[i, j])
         #         print("new weight:", weights[i, j])
-        print("New weights output layer:")
-        print(weights)
+        logging.debug("New weights output layer:")
+        logging.debug(weights)
         # print("deltas")
         # print(partialDeltas)
         layer.prepareNewWeights(weights)
@@ -164,8 +157,8 @@ class Network:
                 # We need: ∂C/∂w = ∂z/∂w*∂a/∂z*∂C/∂a = ∂z/∂w*∂a/∂z*total. Store ∂a/∂z*total for later
                 newPartialDeltas[i, j] = total*layer.activationDerivative(neuron)
                 weights[i, j] = weights[i, j] - self.learningRate*newPartialDeltas[i, j]*neuronPrev
-        print("New weights:")
-        print(weights)
+        logging.debug("New weights:")
+        logging.debug(weights)
         layer.prepareNewWeights(weights)
         return newPartialDeltas
 
@@ -180,41 +173,54 @@ class Network:
             totalCost = totalCost + squaredError
         
         print('Feedforward output:', allOutputs[-1])
+        print('Target:', target)
         print('Total cost:', totalCost)
         print('Average cost:', totalCost/len(inputData))
         return allOutputs[-1]
 
     
-    def train(self, inputData, target):
+    def train(self, inputData, target, miniBatch=True):
         if (len(inputData) != len(target)):
             errorStr = 'Input and output differ in size'
             raise ValueError(errorStr)
         
-        print('All target:', target)
+        logging.debug('All targets:' + str(target))
         totalCost = 0
 
         # Propagate the input forward, get the outputs (also stored inside each layer)
-        allOutputs = self.feedForward(inputData)
-        # print('Output', allOutputs[-1])
-
-
+        # print('Input', (inputData))
+        # allOutputs = self.feedForward(inputData)
+        # print('Output', allOutputs[-1][0])
+        # print("************++")
         for j in range(0, len(inputData)):
+            # print('Input', np.array(inputData[j], ndmin=2))
+            allOutputs = self.feedForward(np.array(inputData[j], ndmin=2))
+            # print('Output', allOutputs[-1][0])
+            # for i in range(self.nLayers - 1, -1, -1):
+            #     # logging.debug("")
+            #     # logging.debug("--------- Backpropagation Layer" + str(i) + "/" + str(self.nLayers-1) + " -------------")
+            #     layer = self.layers[i]
+            #     output = layer.getOutput()[0]
+            #     print(output)
+            #     print("---")
+            
+            # exit(0)
             # Compute the squared error with the last (-1, output layer) for the input case we're treating (j)
-            squaredError = self.computeError(allOutputs[-1][j], target[j])
+            squaredError = self.computeError(allOutputs[-1][0], target[j])
             totalCost = totalCost + squaredError
-            print()
-            print("--------- For input", str(j) + "/" + str(len(inputData)-1), " | Cost:", squaredError, "-------------")
-            print("Output")
-            print(allOutputs[-1][j])
-            print("Target")
-            print(target[j])
-            print("Input")
-            print(inputData[j])
+            logging.debug("")
+            logging.debug("--------- For input" + str(j) + "/" + str(len(inputData)-1) + " | Cost: " + str(squaredError) + " -------------")
+            logging.debug("Output")
+            logging.debug(allOutputs[-1][0])
+            logging.debug("Target")
+            logging.debug(target[j])
+            logging.debug("Input")
+            logging.debug(inputData[j])
             for i in range(self.nLayers - 1, -1, -1):
-                print()
-                print("--------- Backpropagation Layer", str(i) + "/" + str(self.nLayers-1), "-------------")
+                logging.debug("")
+                logging.debug("--------- Backpropagation Layer" + str(i) + "/" + str(self.nLayers-1) + " -------------")
                 layer = self.layers[i]
-                output = layer.getOutput()[j]
+                output = layer.getOutput()[0]
                 # print(layer.getOutput())
                 # exit(0)
 
@@ -222,7 +228,7 @@ class Network:
                     outputPrev = inputData[j]
                 else:
                     layerPrev = self.layers[i-1]
-                    outputPrev = layerPrev.getOutput()[j]
+                    outputPrev = layerPrev.getOutput()[0]
 
                 if i == self.nLayers - 1:
                     partialDeltas = self.computeWeightsOutputLayer(outputPrev, output, target[j], layer)
@@ -230,13 +236,13 @@ class Network:
                     partialDeltas = self.computeWeights(outputPrev, output, layer, self.layers[i+1], partialDeltas)
             
             # Apply the new weights for this input case
-            print('Applying new weights...')
+            logging.debug('Applying new weights...')
             for layer in self.layers:
                 layer.applyNewWeights()
             
             # print('Cost for last input:', squaredError)
 
-        print('Total cost:', totalCost)
+        logging.debug('Total cost:' + str(totalCost))
         return totalCost
 
 

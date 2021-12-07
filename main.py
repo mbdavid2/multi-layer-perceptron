@@ -1,18 +1,31 @@
 import numpy as np
-import mainClasses as mlp
 import Layer
 import Network
 import Neuron
 import random
 import csv
 import matplotlib.pyplot as plt
+import logging
+import sys
 
 A_CODE = 65
+
+def setLoggingLevel(args):
+    logLevel = 'None'
+    if len(args) >= 2:
+        logLevel = args[1]
+
+    if logLevel == '--debug':
+        logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+    else:
+        logging.basicConfig(level=logging.INFO, format='%(message)s')
 
 def plotError(errorByLearningRate):
     for rate, error in errorByLearningRate.items():
         plt.plot(error, '*', label='Mean squared error with η =' + str(rate))
         # plt.set(xlabel="Iteration", ylabel="Mean squared error average")
+        plt.xlabel('Iteration')
+        plt.ylabel('Mean squared error')
     plt.legend(loc="upper left")
 
     # ax4.set_ylim(0, 180)
@@ -59,14 +72,14 @@ def loadLetterDataset(filename, testSize, training, trainingTarget, test, testTa
                 test.append(features)
 
 
-def multipleLearningRates(network, inputData, desiredOutput, iterations):
+def multipleLearningRates(network, inputData, desiredOutput, iterations, rates = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 1.75, 2]):
     errorByLearningRate = {}
-    for learningRate in [0.15, 0.25, 0.5, 0.75, 1, 1.5, 1.75, 2]:
+    for learningRate in rates:
         iterationError = []
         network.reset()
         network.setLearningRate(learningRate)
         for i in range(0, iterations):
-            print("--------------- Iteration", i, "---------------")
+            logging.info("--------------- Iteration " + str(i) + " ---------------")
             error = network.train(inputData, desiredOutput)
             iterationError.append(error)
         errorByLearningRate[learningRate] = iterationError
@@ -128,14 +141,14 @@ def trainXOR():
 
     network = Network.Network([hiddenLayer, outputLayer])
 
-    multipleLearningRates(network, inputData, desiredOutput, 100)
+    multipleLearningRates(network, inputData, desiredOutput, 1000) #, rates=[1.5])
 
 
 def trainSinus():
     inputData = []
     sinuses = []
     random.seed(2)
-    for j in range(0, 100):
+    for j in range(0, 3):
         v = []
         for i in range(0, 4):
             u = random.uniform(-1, 1)
@@ -150,24 +163,35 @@ def trainSinus():
     # print(sinuses)
     # exit()
 
-    hiddenLayer = Layer.Layer(4, 3)
-    outputLayer = Layer.Layer(3, 1, activation=Neuron.Same())
+    hiddenLayer = Layer.Layer(4, 7)
+    outputLayer = Layer.Layer(7, 1, activation=Neuron.Same())
+
+    # network = Network.Network([hiddenLayer, outputLayer])
+
+    # multipleLearningRates(network, inputData, sinuses, 2)
 
     network = Network.Network([hiddenLayer, outputLayer])
     totalCost = []
-    for i in range(0, 500):
+    for i in range(0, 100):
         print("--------------- Iteration", i, "---------------")
         cost = network.train(inputData, sinuses)
         totalCost.append(cost)
 
     network.test(inputData, sinuses)
-    plotError(totalCost, )
+    # plotError(totalCost, )
     # print(sinuses)
 
+def main(args):
+    setLoggingLevel(args)
+    # trainSinus()
+    # exit()
+    trainXOR()
+    # trainLetterRecognition()
 
-# trainSinus()
-# exit()
-trainXOR()
-# trainLetterRecognition()
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))
+
+
 
 

@@ -18,28 +18,29 @@ class Layer:
         self.neurons = []
         self.activation = activation 
 
+        ### TODO: The neurons are not used at all, the function is simply called in feedforward
+
         sigmoid = Neuron.ActivationFunction()
         for i in range(0, self.size):
             self.neurons.append(Neuron.Neuron(sigmoid))
 
+        self.setRandomWeights()
+        
+
+
+    def setRandomWeights(self):
         # Random initial weights and biases
         np.random.seed(0)
-        self.weights = np.random.rand(self.inputSize, self.size)
+        self.weights = (np.random.rand(self.inputSize, self.size) - 0.5) *0.1
         np.random.seed(0)
-        self.biases = np.random.rand(1, self.size)
-
+        self.biases = (np.random.rand(1, self.size) - 0.5) *0.25 #np.zeros(size=(1, self.size)) #(np.random.rand(1, self.size) - 0.5) *0.25
+        self.biases = self.biases - self.biases + 0.1
 
     def reset(self):
-        # Random initial weights and biases
-        np.random.seed(0)
-        self.weights = np.random.rand(self.inputSize, self.size)
-        np.random.seed(0)
-        self.biases = np.random.rand(1, self.size)
-
+        self.setRandomWeights()
 
     def activationDerivative(self, inputData):
         return self.activation.derivative(inputData)
-
 
     def prepareNewWeights(self, newWeights):
         self.newWeights = newWeights
@@ -76,6 +77,9 @@ class Layer:
         # print("Ouput before activation:", self.rawOutput.shape)
         # print(self.rawOutput)
         # print()
+
+        # Do it directly applying the func to the whole array
+        # rather than iterating over each neuron
         self.output = self.activation.activate(self.rawOutput).T
 
     def getOutput(self):
