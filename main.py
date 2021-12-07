@@ -2,40 +2,27 @@ import numpy as np
 import mainClasses as mlp
 import Layer
 import Network
+import Neuron
 import random
 import csv
+import matplotlib.pyplot as plt
 
-# weights = [[0.2, 0.8, -0.5, 1.0],
-#            [0.5, -0.91, 0.26, -0.5],
-#            [-0.26, -0.27, 0.17, 0.87]]
-
-# np.random.seed(0)
-# weights = np.random.rand(4, 4)
-
-# biases = [2, 3, 0.5]
-
-# np.random.seed(0)
-# biases = np.random.rand(1, 4)
-
-# inputs = [[1, 2, 3],
-#           [2.0, 5.0, -1.0, 2.0],
-#           [-1.5, 2.7, 3.3, -0.8]]
-
-# output = np.dot(inputs, np.array(weights).T) + biases
-# print(output)
-
-
-# sigmoid = mlp.ActivationFunction()
-# nNeurons = 4
-# neurons = []
-# for i in range(0, nNeurons):
-#     neurons.append(mlp.Neuron(sigmoid))
-
-# print(neurons)
-
-# for neuron in neurons:
-#     print(neuron.activate(3))
 A_CODE = 65
+
+def plotError(errorByLearningRate):
+    for rate, error in errorByLearningRate.items():
+        plt.plot(error, '*', label='Mean squared error with η =' + str(rate))
+        # plt.set(xlabel="Iteration", ylabel="Mean squared error average")
+    plt.legend(loc="upper left")
+
+    # ax4.set_ylim(0, 180)
+    
+    # plt.suptitle(paramConfigString, fontsize=14)
+    F = plt.gcf()
+    Size = F.get_size_inches()
+    F.set_size_inches(Size[0]*4, Size[1]*4, forward=True)  # Set forward to True to resize window along with plot in figure.
+    plt.show()
+    # plt.savefig(resultsFolder + 'plot' + paramConfigurationKey + '.png')
 
 def getLetter(vector):
     index = np.argmax(vector)
@@ -70,7 +57,22 @@ def loadLetterDataset(filename, testSize, training, trainingTarget, test, testTa
                 for i in range(1, 17):
                     features.append(int(line[i]))
                 test.append(features)
-        
+
+
+def multipleLearningRates(network, inputData, desiredOutput, iterations):
+    errorByLearningRate = {}
+    for learningRate in [0.15, 0.25, 0.5, 0.75, 1, 1.5, 1.75, 2]:
+        iterationError = []
+        network.reset()
+        network.setLearningRate(learningRate)
+        for i in range(0, iterations):
+            print("--------------- Iteration", i, "---------------")
+            error = network.train(inputData, desiredOutput)
+            iterationError.append(error)
+        errorByLearningRate[learningRate] = iterationError
+        network.test(inputData, desiredOutput)
+    
+    plotError(errorByLearningRate)
 
 # Using http://archive.ics.uci.edu/ml/datasets/Letter+Recognition
 def trainLetterRecognition():
@@ -93,10 +95,10 @@ def trainLetterRecognition():
     # exit()
 
     # Setting up the network, 16 input units for the 16 given features
-    hiddenLayer = Layer.Layer(16, 30, True)
-    hiddenLayer2 = Layer.Layer(30, 30, True)
+    hiddenLayer = Layer.Layer(16, 30)
+    hiddenLayer2 = Layer.Layer(30, 30)
     # 26 outputs for each of the alphabet letters
-    outputLayer = Layer.Layer(30, 26, False)
+    outputLayer = Layer.Layer(30, 26)
     
     network = Network.Network([hiddenLayer, hiddenLayer2, outputLayer])
     
@@ -117,26 +119,55 @@ def trainLetterRecognition():
 
     print("Accuracy:", nCorrect/len(allOutputs))
 
+def trainXOR():
+    hiddenLayer = Layer.Layer(2, 7)
+    outputLayer = Layer.Layer(7, 1)
 
-        
+    inputData = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    desiredOutput = np.array([[0], [1], [1], [0]])
 
-trainLetterRecognition()
+    network = Network.Network([hiddenLayer, outputLayer])
 
-# hiddenLayer = Layer.Layer(2, 4, True)
-# # hiddenLayer2 = mlp.Layer(3, 3)
-# outputLayer = Layer.Layer(4, 1, False)
-# # outputLayer = mlp.Layer(hiddenLayer.getLayerSize(), 3)
+    multipleLearningRates(network, inputData, desiredOutput, 100)
 
-# inputData = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-# desiredOutput = np.array([[0], [1], [1], [0]])
 
-# # inputData = np.array([[0.05, 0.10]])
-# # desiredOutput = np.array([[0.01, 0.99]])
+def trainSinus():
+    inputData = []
+    sinuses = []
+    random.seed(2)
+    for j in range(0, 100):
+        v = []
+        for i in range(0, 4):
+            u = random.uniform(-1, 1)
+            v.append(u)
+        inputData.append(v)
+        combination = np.sin(v[0]-v[1]+v[2]-v[3])
+        sinuses.append([combination])
+    
+    inputData = np.array(inputData)
+    sinuses = np.array(sinuses)
+    # print(inputData)
+    # print(sinuses)
+    # exit()
 
-# network = Network.Network([hiddenLayer, outputLayer])
-# # network.feedForward(inputData)
-# for i in range(0, 2000):
-#     print("--------------- Iteration", i, "---------------")
-#     network.train(inputData, desiredOutput)
+    hiddenLayer = Layer.Layer(4, 3)
+    outputLayer = Layer.Layer(3, 1, activation=Neuron.Same())
 
-# network.test(inputData, desiredOutput)
+    network = Network.Network([hiddenLayer, outputLayer])
+    totalCost = []
+    for i in range(0, 500):
+        print("--------------- Iteration", i, "---------------")
+        cost = network.train(inputData, sinuses)
+        totalCost.append(cost)
+
+    network.test(inputData, sinuses)
+    plotError(totalCost, )
+    # print(sinuses)
+
+
+# trainSinus()
+# exit()
+trainXOR()
+# trainLetterRecognition()
+
+

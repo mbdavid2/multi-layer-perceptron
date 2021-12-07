@@ -3,7 +3,7 @@ import numpy as np
 import Neuron
 
 class Layer:
-    def __init__(self, inputSize, size, hard, activation = Neuron.Sigmoid()):
+    def __init__(self, inputSize, size, activation = Neuron.Sigmoid()):
         """Layer constructor, creates the appropriate weight
         and bias matrices based on the layer size and expected
         input size
@@ -27,25 +27,25 @@ class Layer:
         self.weights = np.random.rand(self.inputSize, self.size)
         np.random.seed(0)
         self.biases = np.random.rand(1, self.size)
-        # if hard == True:
-        #     self.weights = np.array([[0.15, 0.25], [0.2, 0.30]])
-        #     self.biases = np.array([[0.35, 0.35]])
-        # else:
-        #     self.weights = np.array([[0.40, 0.50], [0.45, 0.55]])
-        #     self.biases = np.array([[0.60, 0.6]])
+
+
+    def reset(self):
+        # Random initial weights and biases
+        np.random.seed(0)
+        self.weights = np.random.rand(self.inputSize, self.size)
+        np.random.seed(0)
+        self.biases = np.random.rand(1, self.size)
+
+
+    def activationDerivative(self, inputData):
+        return self.activation.derivative(inputData)
 
 
     def prepareNewWeights(self, newWeights):
         self.newWeights = newWeights
 
     def applyNewWeights(self):
-        # Internally here, the weights are not transposed
-        # print("Old weights")
-        # print(self.weights.T)
         self.weights = self.newWeights
-
-        # print("New weights")
-        # print(self.newWeights)
 
     def getInputSize(self):
         return self.inputSize
