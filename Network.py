@@ -130,7 +130,7 @@ class Network:
                
                 # w' = w - eta*∂C/∂w | ∂C/∂w = ∂z/∂w*(∂a/∂z*∂C/∂a), (∂a/∂z*∂C/∂a) = partialDelta
                 weights[i, j] = weights[i, j] - self.learningRate*(neuronPrev*partialDeltas[i, j])
-                
+
                 if i == 0:
                     biases[i, j] = biases[i, j] - self.learningRate*(partialDeltas[i, j])
 
@@ -190,9 +190,9 @@ class Network:
         return newPartialDeltas
 
     def test(self, inputData, target, printOutput=True):   
+        print('Testing...')
         print('Running feedforward...')
         allOutputs = self.feedForward(inputData)
-        print(len(allOutputs[-1]))
 
         # Compute new error
         totalCost = 0
@@ -227,6 +227,7 @@ class Network:
 
 
     def train(self, inputData, target, miniBatch=True):
+        logging.info("Training with learning rate: " + str(self.learningRate))
         if (len(inputData) != len(target)):
             errorStr = 'Input and output differ in size'
             raise ValueError(errorStr)
@@ -299,7 +300,8 @@ class Network:
             
             # print('Cost for last input:', squaredError)
 
-        logging.info('Total cost: ' + str(totalCost))
+        logging.info('Total cost during training: ' + str(totalCost))
+        logging.info('Average cost: ' + str(totalCost/len(inputData)))
         return totalCost
 
 

@@ -125,7 +125,7 @@ def trainLetterRecognition():
     trainingTarget = []
     test = []
     testTarget = []
-    loadLetterDataset('letter-recognition.data', 0.30, training, trainingTarget, test, testTarget)
+    loadLetterDataset('letter-recognition.data', 0.40, training, trainingTarget, test, testTarget)
     training = np.array(training)
     trainingTarget = np.array(trainingTarget)
     test = np.array(test)
@@ -145,12 +145,12 @@ def trainLetterRecognition():
     # 26 outputs for each of the alphabet letters
     outputLayer = Layer.Layer(30, 26)
 
-    network = Network.Network([hiddenLayer, hiddenLayer2, outputLayer], learningRate=0.25)
+    network = Network.Network([hiddenLayer, hiddenLayer2, outputLayer], learningRate=0.1)
     # multipleLearningRates(network, training, trainingTarget, 5, True, rates = [0.01, 0.1, 0.25, 0.5, 1, 2, 3])
     # exit()
     
     globalStart = time.time()
-    for i in range(0, 4):
+    for i in range(0, 20):
         start = time.time()
         print("--------------- Iteration", i, "input size:", len(training), "---------------")
         network.train(training, trainingTarget)
