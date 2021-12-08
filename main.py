@@ -160,7 +160,7 @@ def trainLetterRecognition():
         print(trainingTarget.shape)
         print(allOutputs.shape)
         for i, output in enumerate(allOutputs):
-            target = getLetter(trainingTarget[i])
+            target = getLetter(testTarget[i])
             output = getLetter(output)
             # print("Target:", target, "| Output:", output) 
             if target == output:
