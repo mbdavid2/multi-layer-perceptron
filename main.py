@@ -55,6 +55,7 @@ def getOutputVector(letter):
 
 
 def loadLetterDataset(filename, testSize, training, trainingTarget, test, testTarget):
+    random.seed(2)
     with open(filename, 'r') as csvfile:
         lines = csv.reader(csvfile)
         for line in lines:
@@ -124,7 +125,7 @@ def trainLetterRecognition():
     trainingTarget = []
     test = []
     testTarget = []
-    loadLetterDataset('letter-recognition.data', 0.30, training, trainingTarget, test, testTarget)
+    loadLetterDataset('letter-recognition.data', 0.999, training, trainingTarget, test, testTarget)
     training = np.array(training)
     trainingTarget = np.array(trainingTarget)
     test = np.array(test)
@@ -149,12 +150,15 @@ def trainLetterRecognition():
     # exit()
     
     globalStart = time.time()
-    for i in range(0, 5):
+    for i in range(0, 1):
         start = time.time()
         print("--------------- Iteration", i, "input size:", len(training), "---------------")
         network.train(training, trainingTarget)
         nCorrect = 0
         (allOutputs, totalError) = network.test(test, testTarget, printOutput=False)
+        print(training.shape)
+        print(trainingTarget.shape)
+        print(allOutputs.shape)
         for i, output in enumerate(allOutputs):
             target = getLetter(trainingTarget[i])
             output = getLetter(output)
@@ -166,7 +170,7 @@ def trainLetterRecognition():
         end = time.time()
         print("Finished iteration with time:", (end - start)/60, "minutes")
 
-    allOutputs = network.test(test, testTarget)
+    # allOutputs = network.test(test, testTarget)
 
 
 
@@ -191,7 +195,11 @@ def trainXOR():
     desiredOutput = np.array([[0], [1], [1], [0]])
 
     network = Network.Network([hiddenLayer, outputLayer])
+    for i in range(0, 1000):
+        error = network.train(inputData, desiredOutput)
+        (allOutputs, totalError) = network.test(inputData, desiredOutput, printOutput=True)
 
+    exit()
     multipleLearningRates(network, inputData, desiredOutput, 1000) #, rates=[1.5])
 
 def trainSinus():

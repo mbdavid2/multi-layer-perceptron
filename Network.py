@@ -85,18 +85,43 @@ class Network:
         # print("Output:", output.shape[0])
         # print(output)
 
+        # print("target:", target.shape[0])
+        # print(target)
+
         # print("Prev. Output:", outputPrev.shape[0])
         # print(outputPrev)
 
+        ### New version ###
+        # weights = layer.getWeightsRef()
+        # # print("wieghts")
+        # # print(weights.shape)
+        # # print(weights)
+        # partialDeltas = np.array([(output - target)*(output*(1-output))])
+        # # print("partialDeltas")
+        # # print(partialDeltas.shape)
+        # # print(partialDeltas)
+        # # print("Prev output:", outputPrev.shape)
+        # # print(outputPrev)
+        # out = np.array([outputPrev])
+        # fullGradient = np.dot(out.T, partialDeltas)
+        # # print(fullGradient)
+        # newWeights = weights - self.learningRate*fullGradient
+        # # print("new weights")
+        # # print(newWeights)
+        # layer.prepareNewWeights(newWeights)
+        # partialDeltas = weights + partialDeltas - weights
+        # # exit()
+        # return partialDeltas
+        ### New version ###
+
+
         weights = layer.getWeightsCopy()
         partialDeltas = np.zeros(weights.shape)
-        # print("Weights.T")
+        # print("Weights", weights.shape)
         # print(weights)
-        iters = 0
         for i, neuronPrev in enumerate(outputPrev):
             for j, neuron in enumerate(output):
                 # print("-----")
-                iters = iters + 1
                 # print("Doing weight:", i, j, weights[i, j])
                 # We need: ∂z/∂w*∂a/∂z*∂C/∂a. Store ∂a/∂z*∂C/∂a for later
                 partialDeltas[i, j] = -(target[j] - neuron)*layer.activationDerivative(neuron)
@@ -111,11 +136,9 @@ class Network:
         #         print("new weight:", weights[i, j])
         logging.debug("New weights output layer:")
         logging.debug(weights)
-        # print("deltas")
-        # print(partialDeltas)
         layer.prepareNewWeights(weights)
-        print("iters:", iters)
-        exit()
+        # print("Deltas")
+        # print(partialDeltas)
         return partialDeltas
 
 
@@ -169,6 +192,7 @@ class Network:
     def test(self, inputData, target, printOutput=True):   
         print('Running feedforward...')
         allOutputs = self.feedForward(inputData)
+        print(len(allOutputs[-1]))
 
         # Compute new error
         totalCost = 0
@@ -192,6 +216,11 @@ class Network:
         
         logging.debug('All targets:' + str(target))
         totalCost = 0
+
+        # Separate the input into batches
+        # batchNumber = 20
+        # if miniBatch:
+
 
         # Propagate the input forward, get the outputs (also stored inside each layer)
         # print('Input', (inputData))

@@ -60,6 +60,9 @@ class Layer:
     def getWeightsCopy(self):
         return self.weights.copy()
 
+    def getWeightsRef(self):
+        return self.weights
+
 
     def forwardPropagation(self, inputData):
         # print("Input^T:", inputData.T.shape)
