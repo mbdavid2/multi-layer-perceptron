@@ -10,10 +10,6 @@ class ActivationFunction:
 
 class Sigmoid(ActivationFunction):
     def activate(self, inputValue):
-        # print(inputValue)
-        # if inputValue < 0:
-        #     return np.exp(inputValue)/(1 + np.exp(inputValue))
-        # else:
         return 1 / (1 + np.exp(-inputValue))
 
     def derivative(self, inputValue):

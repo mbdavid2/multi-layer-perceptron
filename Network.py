@@ -2,7 +2,7 @@ import numpy as np
 import logging
 
 class Network:
-    def __init__(self, layers, learningRate = 0.001):
+    def __init__(self, layers, learningRate = 0.5):
         self.layers = layers
         self.nLayers = len(layers)
         self.learningRate = learningRate
@@ -92,9 +92,11 @@ class Network:
         partialDeltas = np.zeros(weights.shape)
         # print("Weights.T")
         # print(weights)
+        iters = 0
         for i, neuronPrev in enumerate(outputPrev):
             for j, neuron in enumerate(output):
                 # print("-----")
+                iters = iters + 1
                 # print("Doing weight:", i, j, weights[i, j])
                 # We need: ∂z/∂w*∂a/∂z*∂C/∂a. Store ∂a/∂z*∂C/∂a for later
                 partialDeltas[i, j] = -(target[j] - neuron)*layer.activationDerivative(neuron)
@@ -112,6 +114,8 @@ class Network:
         # print("deltas")
         # print(partialDeltas)
         layer.prepareNewWeights(weights)
+        print("iters:", iters)
+        exit()
         return partialDeltas
 
 
@@ -162,7 +166,7 @@ class Network:
         layer.prepareNewWeights(weights)
         return newPartialDeltas
 
-    def test(self, inputData, target):   
+    def test(self, inputData, target, printOutput=True):   
         print('Running feedforward...')
         allOutputs = self.feedForward(inputData)
 
@@ -171,12 +175,14 @@ class Network:
         for j in range(0, len(inputData)):
             squaredError = self.computeError(allOutputs[-1][j], target[j])
             totalCost = totalCost + squaredError
+            if printOutput:
+                print('Output ' + str(j) + ' ' + str(allOutputs[-1][j]) + ' | Target: ' + str(target[j]))
         
-        print('Feedforward output:', allOutputs[-1])
-        print('Target:', target)
+        # print('Feedforward output:', allOutputs[-1])
+        # print('Target:', target)
         print('Total cost:', totalCost)
         print('Average cost:', totalCost/len(inputData))
-        return allOutputs[-1]
+        return (allOutputs[-1], totalCost)
 
     
     def train(self, inputData, target, miniBatch=True):
@@ -208,6 +214,7 @@ class Network:
             # Compute the squared error with the last (-1, output layer) for the input case we're treating (j)
             squaredError = self.computeError(allOutputs[-1][0], target[j])
             totalCost = totalCost + squaredError
+            # print("Current error: ", squaredError)
             logging.debug("")
             logging.debug("--------- For input" + str(j) + "/" + str(len(inputData)-1) + " | Cost: " + str(squaredError) + " -------------")
             logging.debug("Output")
@@ -242,7 +249,7 @@ class Network:
             
             # print('Cost for last input:', squaredError)
 
-        logging.debug('Total cost:' + str(totalCost))
+        logging.info('Total cost: ' + str(totalCost))
         return totalCost
 
 

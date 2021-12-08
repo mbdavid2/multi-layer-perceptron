@@ -7,6 +7,7 @@ import csv
 import matplotlib.pyplot as plt
 import logging
 import sys
+import time
 
 A_CODE = 65
 
@@ -21,6 +22,8 @@ def setLoggingLevel(args):
         logging.basicConfig(level=logging.INFO, format='%(message)s')
 
 def plotError(errorByLearningRate):
+    print(errorByLearningRate)
+
     for rate, error in errorByLearningRate.items():
         plt.plot(error, '*', label='Mean squared error with η =' + str(rate))
         # plt.set(xlabel="Iteration", ylabel="Mean squared error average")
@@ -72,18 +75,46 @@ def loadLetterDataset(filename, testSize, training, trainingTarget, test, testTa
                 test.append(features)
 
 
-def multipleLearningRates(network, inputData, desiredOutput, iterations, rates = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 1.75, 2]):
+def multipleLearningRates(network, inputData, outputData, iterations, letters, rates = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 1.75, 2]):
+    trainData, testData = inputData
+    trainTarget, testTarget = outputData
     errorByLearningRate = {}
     for learningRate in rates:
         iterationError = []
         network.reset()
         network.setLearningRate(learningRate)
+        print("Learning rate:", learningRate)
         for i in range(0, iterations):
-            logging.info("--------------- Iteration " + str(i) + " ---------------")
-            error = network.train(inputData, desiredOutput)
-            iterationError.append(error)
-        errorByLearningRate[learningRate] = iterationError
-        network.test(inputData, desiredOutput)
+            logging.info("--------------- Iteration " + str(i) + " | Input size: " + str(len(trainData)) + " ---------------")
+            error = network.train(trainData, trainTarget)
+            (allOutputs, totalError) = network.test(testData, testTarget, printOutput=False)
+
+            ######
+            if letters:
+                nCorrect = 0
+                allOutputs = network.test(testData, testTarget, printOutput=False)
+                for i, output in enumerate(allOutputs):
+                    target = getLetter(trainTarget[i])
+                    output = getLetter(output)
+                    # print("Target:", target, "| Output:", output) 
+                    if target == output:
+                        nCorrect = nCorrect + 1
+
+                print("Accuracy:", nCorrect/len(allOutputs))
+                error = nCorrect/len(allOutputs)
+        
+            ######
+
+            if np.isnan(error):
+                iterationError = []
+                break
+            else:
+                iterationError.append(totalError)
+
+        if len(iterationError) != 0:
+            errorByLearningRate[learningRate] = iterationError
+        
+        network.test(testData, testTarget, printOutput=False)
     
     plotError(errorByLearningRate)
 
@@ -93,7 +124,7 @@ def trainLetterRecognition():
     trainingTarget = []
     test = []
     testTarget = []
-    loadLetterDataset('letter-recognition.data', 2/3, training, trainingTarget, test, testTarget)
+    loadLetterDataset('letter-recognition.data', 0.30, training, trainingTarget, test, testTarget)
     training = np.array(training)
     trainingTarget = np.array(trainingTarget)
     test = np.array(test)
@@ -108,29 +139,49 @@ def trainLetterRecognition():
     # exit()
 
     # Setting up the network, 16 input units for the 16 given features
-    hiddenLayer = Layer.Layer(16, 30)
-    hiddenLayer2 = Layer.Layer(30, 30)
+    hiddenLayer = Layer.Layer(16, 100)
+    hiddenLayer2 = Layer.Layer(100, 30)
     # 26 outputs for each of the alphabet letters
     outputLayer = Layer.Layer(30, 26)
+
+    network = Network.Network([hiddenLayer, hiddenLayer2, outputLayer], learningRate=0.25)
+    # multipleLearningRates(network, training, trainingTarget, 5, True, rates = [0.01, 0.1, 0.25, 0.5, 1, 2, 3])
+    # exit()
     
-    network = Network.Network([hiddenLayer, hiddenLayer2, outputLayer])
-    
-    for i in range(0, 1):
-        print("--------------- Iteration", i, "---------------")
-        for j, example in enumerate(training):
-            network.train(np.array([example]), np.array([trainingTarget[j]]))
+    globalStart = time.time()
+    for i in range(0, 5):
+        start = time.time()
+        print("--------------- Iteration", i, "input size:", len(training), "---------------")
+        network.train(training, trainingTarget)
+        nCorrect = 0
+        (allOutputs, totalError) = network.test(test, testTarget, printOutput=False)
+        for i, output in enumerate(allOutputs):
+            target = getLetter(trainingTarget[i])
+            output = getLetter(output)
+            # print("Target:", target, "| Output:", output) 
+            if target == output:
+                nCorrect = nCorrect + 1
+
+        print("Accuracy:", nCorrect/len(allOutputs))
+        end = time.time()
+        print("Finished iteration with time:", (end - start)/60, "minutes")
 
     allOutputs = network.test(test, testTarget)
 
-    nCorrect = 0
-    for i, output in enumerate(allOutputs):
-        target = getLetter(testTarget[i])
-        output = getLetter(output)
-        print("Target:", target, "| Output:", output) 
-        if target == output:
-            nCorrect = nCorrect + 1
 
-    print("Accuracy:", nCorrect/len(allOutputs))
+
+
+    # nCorrect = 0
+    # for i, output in enumerate(allOutputs):
+    #     target = getLetter(testTarget[i])
+    #     output = getLetter(output)
+    #     print("Target:", target, "| Output:", output) 
+    #     if target == output:
+    #         nCorrect = nCorrect + 1
+
+    # print("Accuracy:", nCorrect/len(allOutputs))
+    globalEnd = time.time()
+    print("Finished training with time:", (globalEnd - globalStart)/60, "minutes") 
 
 def trainXOR():
     hiddenLayer = Layer.Layer(2, 7)
@@ -143,50 +194,42 @@ def trainXOR():
 
     multipleLearningRates(network, inputData, desiredOutput, 1000) #, rates=[1.5])
 
-
 def trainSinus():
-    inputData = []
-    sinuses = []
+    trainData = []
+    target = []
+    testData = []
+    testTarget = []
     random.seed(2)
-    for j in range(0, 3):
+    for j in range(0, 500):
         v = []
         for i in range(0, 4):
             u = random.uniform(-1, 1)
             v.append(u)
-        inputData.append(v)
         combination = np.sin(v[0]-v[1]+v[2]-v[3])
-        sinuses.append([combination])
+        if j < 400:
+            trainData.append(v)
+            target.append([combination])
+        else:
+            testData.append(v)
+            testTarget.append([combination])
     
-    inputData = np.array(inputData)
-    sinuses = np.array(sinuses)
-    # print(inputData)
-    # print(sinuses)
-    # exit()
+    trainData = np.array(trainData)
+    target = np.array(target)
+    testData = np.array(testData)
+    testTarget = np.array(testTarget)
 
     hiddenLayer = Layer.Layer(4, 7)
     outputLayer = Layer.Layer(7, 1, activation=Neuron.Same())
 
-    # network = Network.Network([hiddenLayer, outputLayer])
-
-    # multipleLearningRates(network, inputData, sinuses, 2)
-
     network = Network.Network([hiddenLayer, outputLayer])
-    totalCost = []
-    for i in range(0, 100):
-        print("--------------- Iteration", i, "---------------")
-        cost = network.train(inputData, sinuses)
-        totalCost.append(cost)
-
-    network.test(inputData, sinuses)
-    # plotError(totalCost, )
-    # print(sinuses)
+    multipleLearningRates(network, (trainData, testData), (target, testTarget), 200, False, rates = [0.001, 0.01, 0.1, 0.2, 0.3,0.5, 0.75,1,2,3])
 
 def main(args):
     setLoggingLevel(args)
     # trainSinus()
     # exit()
-    trainXOR()
-    # trainLetterRecognition()
+    # trainXOR()
+    trainLetterRecognition()
 
 
 if __name__ == '__main__':

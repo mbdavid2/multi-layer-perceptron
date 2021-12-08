@@ -32,9 +32,11 @@ class Layer:
         # Random initial weights and biases
         np.random.seed(0)
         self.weights = (np.random.rand(self.inputSize, self.size) - 0.5) *0.1
+        # self.weights = np.random.rand(self.inputSize, self.size)
         np.random.seed(0)
         self.biases = (np.random.rand(1, self.size) - 0.5) *0.25 #np.zeros(size=(1, self.size)) #(np.random.rand(1, self.size) - 0.5) *0.25
         self.biases = self.biases - self.biases + 0.1
+        # self.biases = np.random.rand(1, self.size) 
 
     def reset(self):
         self.setRandomWeights()
