@@ -44,11 +44,13 @@ class Layer:
     def activationDerivative(self, inputData):
         return self.activation.derivative(inputData)
 
-    def prepareNewWeights(self, newWeights):
+    def prepareNewParameters(self, newWeights, newBiases):
         self.newWeights = newWeights
+        self.newBiases = newBiases
 
-    def applyNewWeights(self):
+    def applyNewParameters(self):
         self.weights = self.newWeights
+        self.biases = self.newBiases
 
     def getInputSize(self):
         return self.inputSize
@@ -59,6 +61,12 @@ class Layer:
     # Return copy to not override the weights
     def getWeightsCopy(self):
         return self.weights.copy()
+
+    def getBiasesCopy(self):
+        return self.biases.copy()
+
+    def getBiasesRef(self):
+        return self.biases
 
     def getWeightsRef(self):
         return self.weights

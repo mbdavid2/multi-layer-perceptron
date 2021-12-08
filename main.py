@@ -125,7 +125,7 @@ def trainLetterRecognition():
     trainingTarget = []
     test = []
     testTarget = []
-    loadLetterDataset('letter-recognition.data', 0.999, training, trainingTarget, test, testTarget)
+    loadLetterDataset('letter-recognition.data', 0.30, training, trainingTarget, test, testTarget)
     training = np.array(training)
     trainingTarget = np.array(trainingTarget)
     test = np.array(test)
@@ -140,8 +140,8 @@ def trainLetterRecognition():
     # exit()
 
     # Setting up the network, 16 input units for the 16 given features
-    hiddenLayer = Layer.Layer(16, 100)
-    hiddenLayer2 = Layer.Layer(100, 30)
+    hiddenLayer = Layer.Layer(16, 50)
+    hiddenLayer2 = Layer.Layer(50, 30)
     # 26 outputs for each of the alphabet letters
     outputLayer = Layer.Layer(30, 26)
 
@@ -150,15 +150,12 @@ def trainLetterRecognition():
     # exit()
     
     globalStart = time.time()
-    for i in range(0, 1):
+    for i in range(0, 4):
         start = time.time()
         print("--------------- Iteration", i, "input size:", len(training), "---------------")
         network.train(training, trainingTarget)
         nCorrect = 0
         (allOutputs, totalError) = network.test(test, testTarget, printOutput=False)
-        print(training.shape)
-        print(trainingTarget.shape)
-        print(allOutputs.shape)
         for i, output in enumerate(allOutputs):
             target = getLetter(testTarget[i])
             output = getLetter(output)
@@ -194,8 +191,8 @@ def trainXOR():
     inputData = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
     desiredOutput = np.array([[0], [1], [1], [0]])
 
-    network = Network.Network([hiddenLayer, outputLayer])
-    for i in range(0, 1000):
+    network = Network.Network([hiddenLayer, outputLayer], learningRate=0.95)
+    for i in range(0, 2000):
         error = network.train(inputData, desiredOutput)
         (allOutputs, totalError) = network.test(inputData, desiredOutput, printOutput=True)
 
