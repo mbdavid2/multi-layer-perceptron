@@ -15,11 +15,13 @@ def setLoggingLevel(args):
     logLevel = 'None'
     if len(args) >= 2:
         logLevel = args[1]
-
+    logUserSet = False
     if logLevel == '--debug':
         logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+        logUserSet = True
     else:
         logging.basicConfig(level=logging.INFO, format='%(message)s')
+    return logUserSet
 
 def plotError(errorByLearningRate, title, titleSimple, letters=False):
     print(errorByLearningRate)
@@ -43,7 +45,7 @@ def plotError(errorByLearningRate, title, titleSimple, letters=False):
     F = plt.gcf()
     Size = F.get_size_inches()
     F.set_size_inches(Size[0]*4, Size[1]*4, forward=True)  # Set forward to True to resize window along with plot in figure.
-    plt.savefig('results_' + titleSimple + '.png')
+    plt.savefig('results/results_' + titleSimple + '.png')
     plt.show()
 
 def getLetter(vector):
@@ -58,7 +60,6 @@ def getOutputVector(letter):
     return letterVector
     # print(letterVector)
     # print(letter, ord(letter), chr(ord(letter)))
-
 
 def loadLetterDataset(filename, testSize, training, trainingTarget, test, testTarget):
     random.seed(2)
@@ -80,7 +81,6 @@ def loadLetterDataset(filename, testSize, training, trainingTarget, test, testTa
                 for i in range(1, 17):
                     features.append(int(line[i]))
                 test.append(features)
-
 
 def multipleLearningRates(network, inputData, outputData, iterations, letters, rates = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 1.75, 2]):
     (trainData, testData) = inputData
@@ -134,7 +134,7 @@ def trainLetterRecognition():
     trainingTarget = []
     test = []
     testTarget = []
-    loadLetterDataset('letter-recognition.data', 1/5, training, trainingTarget, test, testTarget)
+    loadLetterDataset('datasets/letter-recognition.data', 1/5, training, trainingTarget, test, testTarget)
     training = np.array(training)
     trainingTarget = np.array(trainingTarget)
     test = np.array(test)
@@ -151,8 +151,7 @@ def trainLetterRecognition():
     network.printNetworkInfo()
     inputData = (training, test)
     outputData = (trainingTarget, testTarget)
-    multipleLearningRates(network, inputData, outputData, 10, True, rates=[0.1, 0.05, 0.01])
-    # multipleLearningRates(network, inputData, outputData, 300, True, rates=[0.4, 0.2, 0.1, 0.05, 0.01, 0.005, 0.001])
+    multipleLearningRates(network, inputData, outputData, 2, True, rates=[0.1]) #rates=[0.1, 0.05, 0.01]
     exit()
     # rates = [3, 2, 1.5, 1, 0.75, 0.5, 0.3, 0.2, 0.1]
     rates = [0.01]
@@ -259,11 +258,22 @@ def trainSinus():
     multipleLearningRates(network, (trainData, testData), (target, testTarget), 200, False, rates = [0.001, 0.01, 0.1, 0.2, 0.3,0.5, 0.75,1,2,3])
 
 def main(args):
-    setLoggingLevel(args)
-    # trainSinus()
-    # exit()
-    # trainXOR()
-    trainLetterRecognition()
+    # Decide which problem to execute and debugging level. Simple "parser"
+    logUserSet = setLoggingLevel(args)
+    if (logUserSet and len(args) > 2) or (not logUserSet and len(args) == 2):
+        if logUserSet:
+            problem = args[2]
+        else:
+            problem = args[1]
+        if problem == 'xor':
+            trainXOR()
+        elif problem == 'sin':
+            trainSinus()
+        elif problem == 'letter':
+            trainLetterRecognition()
+    else:
+        trainLetterRecognition()
+    
 
 
 if __name__ == '__main__':
