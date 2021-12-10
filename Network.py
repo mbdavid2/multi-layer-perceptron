@@ -4,10 +4,12 @@ import logging
 from numpy.core.numeric import full
 
 class Network:
-    def __init__(self, layers, learningRate = 0.5):
+    def __init__(self, layers, softMax=False, learningRate = 0.5):
         self.layers = layers
         self.nLayers = len(layers)
         self.learningRate = learningRate
+        self.softMax = softMax
+
 
     def checkDimensions(self, inputData, layer, layerN):
         # Check that the input size is the same as layers[0]
@@ -17,15 +19,47 @@ class Network:
                        ' (Layer(' + str(layerN) + ') expected input size)')
             raise ValueError(errorStr)
 
+    
+    def getLayersDescription(self):
+        description = "Network:"
+        for i, layer in enumerate(self.layers):
+            if i == 0:
+                description = description + " (Input " + str(layer.inputSize)
+            else:
+                description = description + layer.getActivationName() + "(" + str(layer.size)
+
+            if i < len(self.layers) - 1:
+                description = description + ")->"
+            else:
+                description = description + ", SoftMax: " + str(self.softMax) + ")"
+        return description
+
+    def getLayersDescriptionSimple(self):
+        description = ""
+        for i, layer in enumerate(self.layers):
+            if i == 0:
+                description = description + "in" + str(layer.inputSize)
+            else:
+                description = description + layer.getActivationName(True) + str(layer.size)
+
+            if i < len(self.layers) - 1:
+                description = description + "_"
+            else:
+                description = description + "soft_" + str(self.softMax).lower()[0]
+
+        return description
+
+
     def printNetworkInfo(self):
         for i, layer in enumerate(self.layers):
             print("Layer", i, " | Input size:", layer.inputSize, "| Neurons:", layer.size)
 
+
     def reset(self):
         for layer in self.layers:
             layer.reset()
-
     
+
     def setLearningRate(self, learningRate):
         self.learningRate = learningRate
 
@@ -39,15 +73,9 @@ class Network:
     
     def softMaxBatch(self, outputValues):
         exponents = np.exp(outputValues)
-        # print("exponents:", exponents)
         totalSums = np.sum(exponents, axis=1, keepdims=True)
-        # print("TotalSums:", totalSums, totalSums.shape)
         normValues = exponents / totalSums
-        # print("Norm values")
-        # print(normValues)
-        # normValues = [self.softMax(x) for x in outputValues]
         return normValues
-
 
     def feedForward(self, inputData):
         nextInput = inputData
@@ -59,8 +87,8 @@ class Network:
             logging.debug("--------- Feedforward Layer " + str(i) + "/" + str(self.nLayers-1) + str("-------------"))
             layer.forwardPropagation(nextInput)
             nextInput = layer.getOutput()
-            # if i == len(self.layers)-1:
-            #     nextInput = self.softMax(nextInput)
+            if self.softMax and i == len(self.layers) - 1:
+                nextInput = self.softMax(nextInput)
             allOutputs.append(nextInput)
             # print("Layer output (activated): ", nextInput.shape)
             # print(nextInput)
@@ -93,7 +121,7 @@ class Network:
         # print(weights.shape)
         # print(weights)
 
-        partialDeltas = np.array([(output - target)*(output*(1-output))])
+        partialDeltas = np.array([(output - target)*layer.activationDerivative(output)])
         # print("partialDeltas")
         # print(partialDeltas.shape)
         # print(partialDeltas)
@@ -149,7 +177,7 @@ class Network:
         biases = layer.getBiasesCopy()
         nextWeightsRef = nextLayer.weights
 
-        newPartialDeltas =  np.dot(partialDeltas, nextWeightsRef.T)*(output*(1-output))
+        newPartialDeltas =  np.dot(partialDeltas, nextWeightsRef.T)*layer.activationDerivative(output)
         # print(newPartialDeltas)
         out = np.array([outputPrev])
         fullGradient = np.dot(out.T, newPartialDeltas)
@@ -235,24 +263,7 @@ class Network:
         return (allOutputs[-1], totalCost)
 
     
-    # def chunks(self, L, n): 
-    #     chunkSize = int(len(L)/n)
-    #     print("Expected chunk size:", chunkSize)
-    #     chunks = []
-    #     currentChunk = []
-    #     i = 0
-    #     for elem in enumerate(L):
-    #         currentChunk.append(elem)
-    #         if i > chunkSize:
-    #             chunks.append(np.array(currentChunk))
-    #             currentChunk = []
-    #             i = 0
-    #         i = i + 1
-    #     chunks.append(np.array(currentChunk))
-    #     return chunks
-
-
-    def train(self, inputData, target, miniBatch=True):
+    def train(self, inputData, target):
         logging.info("Training with learning rate: " + str(self.learningRate))
         if (len(inputData) != len(target)):
             errorStr = 'Input and output differ in size'
@@ -261,20 +272,7 @@ class Network:
         logging.debug('All targets:' + str(target))
         totalCost = 0
 
-        # Separate the input into batches
-        # batchNumber = 4
-        # batches = []
-        # if miniBatch:
-        #     batches = np.array(self.chunks(inputData, batchNumber))
-        #     print("Batches shpape", batches.shape)
-        #     # print(batches)
-        # else:
-        #     batches = [inputData]
-            # Propagate the input forward, get the outputs (also stored inside each layer)
-            # print('Input', (inputData))
-            # allOutputs = self.feedForward(inputData)
-            # print('Output', allOutputs[-1][0])
-            # print("************++")
+    
         for j in range(0, len(inputData)):
             # print('Input', np.array(inputData[j], ndmin=2))
             allOutputs = self.feedForward(np.array(inputData[j], ndmin=2))

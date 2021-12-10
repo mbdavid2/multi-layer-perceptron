@@ -7,6 +7,12 @@ class ActivationFunction:
     def derivative(self, inputValue):
         return inputValue
 
+    def name(self):
+        return "basic"
+
+    def nameShort(self):
+        return "basic"
+
 
 class Sigmoid(ActivationFunction):
     def activate(self, inputValue):
@@ -14,6 +20,12 @@ class Sigmoid(ActivationFunction):
 
     def derivative(self, inputValue):
         return inputValue*(1 - inputValue)
+    
+    def name(self):
+        return "sigmoid"
+
+    def nameShort(self):
+        return "sig"
 
 
 class Same(ActivationFunction):
@@ -22,6 +34,12 @@ class Same(ActivationFunction):
 
     def derivative(self, inputValue):
         return 1
+    
+    def name(self):
+        return "identity"
+
+    def nameShort(self):
+        return "id"
 
 
 class Tanh(ActivationFunction):

@@ -26,7 +26,11 @@ class Layer:
 
         self.setRandomWeights()
         
-
+    def getActivationName(self, simple=False):
+        if simple:
+            return self.activation.nameShort()
+        else:
+            return self.activation.name()
 
     def setRandomWeights(self):
         # Random initial weights and biases
