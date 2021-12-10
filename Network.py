@@ -1,6 +1,8 @@
 import numpy as np
 import logging
 
+from numpy.core.numeric import full
+
 class Network:
     def __init__(self, layers, learningRate = 0.5):
         self.layers = layers
@@ -15,6 +17,9 @@ class Network:
                        ' (Layer(' + str(layerN) + ') expected input size)')
             raise ValueError(errorStr)
 
+    def printNetworkInfo(self):
+        for i, layer in enumerate(self.layers):
+            print("Layer", i, " | Input size:", layer.inputSize, "| Neurons:", layer.size)
 
     def reset(self):
         for layer in self.layers:
@@ -143,6 +148,21 @@ class Network:
         weights = layer.getWeightsCopy()
         biases = layer.getBiasesCopy()
         nextWeightsRef = nextLayer.weights
+
+        newPartialDeltas =  np.dot(partialDeltas, nextWeightsRef.T)*(output*(1-output))
+        # print(newPartialDeltas)
+        out = np.array([outputPrev])
+        fullGradient = np.dot(out.T, newPartialDeltas)
+        newWeights = weights - self.learningRate*fullGradient
+        newBiases = biases - self.learningRate*newPartialDeltas
+        layer.prepareNewParameters(newWeights, newBiases)
+        # newPartialDeltas = np.zeros(weights.shape) + newPartialDeltas
+        return newPartialDeltas
+
+    def computeWeightsIterative(self, outputPrev, output, layer, nextLayer, partialDeltas):
+        weights = layer.getWeightsCopy()
+        biases = layer.getBiasesCopy()
+        nextWeightsRef = nextLayer.weights
         # print("Output:", output.shape[0])
         # print(output)
 
@@ -155,11 +175,13 @@ class Network:
         # print("given deltas")
         # print(partialDeltas.shape)
 
-        # print("prev weights")
-        # print(nextWeightsRef)
+        # print("Next weights")
+        # print(nextWeightsRef.shape)
+
+        # exit()
 
         newPartialDeltas = np.zeros(weights.shape)
-
+        # print(partialDeltas)
         for i, neuronPrev in enumerate(outputPrev):
             for j, neuron in enumerate(output):
                 # print("-----")
@@ -184,6 +206,10 @@ class Network:
                 weights[i, j] = weights[i, j] - self.learningRate*newPartialDeltas[i, j]*neuronPrev
                 if i == 0:
                     biases[i, j] = biases[i, j] - self.learningRate*newPartialDeltas[i, j]
+        # print(weights)
+        # exit()
+        # print(newPartialDeltas)
+        # exit()
         logging.debug("New weights:")
         logging.debug(weights)
         layer.prepareNewParameters(weights, biases)
