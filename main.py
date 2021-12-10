@@ -10,6 +10,7 @@ import sys
 import time
 
 A_CODE = 65
+RANDOM_SEED = 2
 
 def setLoggingLevel(args):
     logLevel = 'None'
@@ -22,6 +23,37 @@ def setLoggingLevel(args):
     else:
         logging.basicConfig(level=logging.INFO, format='%(message)s')
     return logUserSet
+
+def getLetter(vector):
+    index = np.argmax(vector)
+    return chr(index + A_CODE)
+
+def getOutputVector(letter):
+    # A's code is 65, start indexing at that
+    letterVector = np.zeros(26, dtype=np.int8)
+    index = ord(letter) - A_CODE
+    letterVector[index] = 1
+    return letterVector
+
+def loadLetterDataset(filename, testSize, training, trainingTarget, test, testTarget):
+    random.seed(RANDOM_SEED)
+    with open(filename, 'r') as csvfile:
+        lines = csv.reader(csvfile)
+        for line in lines:
+            # Decide if it is going to be for the training or the testing set
+            if random.random() > testSize:
+                features = []
+                # Get the letter label and then the features
+                trainingTarget.append(getOutputVector(line[0]))
+                for i in range(1, 17):
+                    features.append(int(line[i]))
+                training.append(features)
+            else:
+                features = []
+                testTarget.append(getOutputVector(line[0]))
+                for i in range(1, 17):
+                    features.append(int(line[i]))
+                test.append(features)
 
 def plotError(errorByLearningRate, title, titleSimple, letters=False):
     print(errorByLearningRate)
@@ -48,39 +80,6 @@ def plotError(errorByLearningRate, title, titleSimple, letters=False):
     plt.savefig('results/results_' + titleSimple + '.png')
     plt.show()
 
-def getLetter(vector):
-    index = np.argmax(vector)
-    return chr(index + A_CODE)
-
-def getOutputVector(letter):
-    # A's code is 65, start indexing at that
-    letterVector = np.zeros(26, dtype=np.int8)
-    index = ord(letter) - A_CODE
-    letterVector[index] = 1
-    return letterVector
-    # print(letterVector)
-    # print(letter, ord(letter), chr(ord(letter)))
-
-def loadLetterDataset(filename, testSize, training, trainingTarget, test, testTarget):
-    random.seed(2)
-    with open(filename, 'r') as csvfile:
-        lines = csv.reader(csvfile)
-        for line in lines:
-            # Decide if it is going to be for the training or the testing set
-            if random.random() > testSize:
-                features = []
-                # Get the letter label and the features
-                
-                trainingTarget.append(getOutputVector(line[0]))
-                for i in range(1, 17):
-                    features.append(int(line[i]))
-                training.append(features)
-            else:
-                features = []
-                testTarget.append(getOutputVector(line[0]))
-                for i in range(1, 17):
-                    features.append(int(line[i]))
-                test.append(features)
 
 def multipleLearningRates(network, inputData, outputData, iterations, letters, rates = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 1.75, 2]):
     (trainData, testData) = inputData
@@ -232,7 +231,7 @@ def trainSinus():
     target = []
     testData = []
     testTarget = []
-    random.seed(2)
+    random.seed(RANDOM_SEED)
     for j in range(0, 500):
         v = []
         for i in range(0, 4):
@@ -257,6 +256,9 @@ def trainSinus():
     network = Network.Network([hiddenLayer, outputLayer])
     multipleLearningRates(network, (trainData, testData), (target, testTarget), 200, False, rates = [0.001, 0.01, 0.1, 0.2, 0.3,0.5, 0.75,1,2,3])
 
+def printUsage():
+    print("Usage: python3 main.py [--debug] [xor/sin/letter]")
+
 def main(args):
     # Decide which problem to execute and debugging level. Simple "parser"
     logUserSet = setLoggingLevel(args)
@@ -271,10 +273,10 @@ def main(args):
             trainSinus()
         elif problem == 'letter':
             trainLetterRecognition()
+        else:
+            printUsage()
     else:
         trainLetterRecognition()
-    
-
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
