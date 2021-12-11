@@ -24,7 +24,8 @@ class Network:
         description = "Network:"
         for i, layer in enumerate(self.layers):
             if i == 0:
-                description = description + " (Input " + str(layer.inputSize)
+                description = description + " (Input " + str(layer.inputSize) + ")->"
+                description = description + layer.getActivationName() + "(" + str(layer.size)
             else:
                 description = description + layer.getActivationName() + "(" + str(layer.size)
 
@@ -38,7 +39,8 @@ class Network:
         description = ""
         for i, layer in enumerate(self.layers):
             if i == 0:
-                description = description + "in" + str(layer.inputSize)
+                description = description + "in" + str(layer.inputSize) + "_"
+                description = description + layer.getActivationName(True) + str(layer.size)
             else:
                 description = description + layer.getActivationName(True) + str(layer.size)
 
@@ -244,7 +246,7 @@ class Network:
         return newPartialDeltas
 
     def test(self, inputData, target, printOutput=True):   
-        print('Testing...')
+        print('Testing with input size:', len(inputData))
         print('Running feedforward...')
         allOutputs = self.feedForward(inputData)
 
@@ -258,9 +260,10 @@ class Network:
         
         # print('Feedforward output:', allOutputs[-1])
         # print('Target:', target)
+        averagedCost = totalCost/len(inputData)
         print('Total cost:', totalCost)
-        print('Average cost:', totalCost/len(inputData))
-        return (allOutputs[-1], totalCost)
+        print('Averaged cost:', averagedCost)
+        return (allOutputs[-1], averagedCost)
 
     
     def train(self, inputData, target):
@@ -324,9 +327,10 @@ class Network:
             
             # print('Cost for last input:', squaredError)
 
+        averagedCost = totalCost/len(inputData)
         logging.info('Total cost during training: ' + str(totalCost))
-        logging.info('Average cost: ' + str(totalCost/len(inputData)))
-        return totalCost
+        logging.info('Average cost: ' + str(averagedCost))
+        return averagedCost
 
 
         

@@ -46,6 +46,15 @@ class Tanh(ActivationFunction):
     def activate(self, inputValue):
         return np.tanh(inputValue)
 
+    def derivative(self, inputValue):
+        return 1 - np.tanh(inputValue)**2
+    
+    def name(self):
+        return "tanh"
+
+    def nameShort(self):
+        return "tanh"
+
 
 class Neuron:
     def __init__(self, activationF):

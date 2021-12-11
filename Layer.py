@@ -18,7 +18,8 @@ class Layer:
         self.neurons = []
         self.activation = activation 
 
-        ### TODO: The neurons are not used at all, the function is simply called in feedforward
+        ### TODO: The neuron instances are not really used, the act. function 
+        # is simply called in the feedforward method
 
         sigmoid = Neuron.ActivationFunction()
         for i in range(0, self.size):
@@ -35,12 +36,14 @@ class Layer:
     def setRandomWeights(self):
         # Random initial weights and biases
         np.random.seed(0)
-        self.weights = (np.random.rand(self.inputSize, self.size) - 0.5) *0.1
-        # self.weights = np.random.rand(self.inputSize, self.size)
-        np.random.seed(0)
-        self.biases = (np.random.rand(1, self.size) - 0.5) *0.25 #np.zeros(size=(1, self.size)) #(np.random.rand(1, self.size) - 0.5) *0.25
-        self.biases = self.biases - self.biases + 0.1
-        # self.biases = np.random.rand(1, self.size) 
+        # self.weights = (np.random.rand(self.inputSize, self.size) - 0.5) *0.1
+        self.weights = np.random.rand(self.inputSize, self.size)*np.sqrt(1/self.inputSize)
+        # print(self.weights)
+        # exit()
+        # np.random.seed(0)
+        # self.biases = (np.random.rand(1, self.size) - 0.5) *0.25 #np.zeros(size=(1, self.size)) #(np.random.rand(1, self.size) - 0.5) *0.25
+        # self.biases = self.biases - self.biases + 0.1
+        self.biases = np.zeros(shape=(1, self.size)) 
 
     def reset(self):
         self.setRandomWeights()
