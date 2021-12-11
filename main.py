@@ -11,7 +11,6 @@ import time
 
 A_CODE = 65
 RANDOM_SEED = 2
-printLossLetters = False
 
 def setLoggingLevel(args):
     logLevel = 'None'
@@ -88,7 +87,9 @@ def getLetterAccuracy(allOutputs, testTarget, printOutput=False):
             print("Target:", target, "| Output:", output) 
         if target == output:
             nCorrect = nCorrect + 1
-    return nCorrect/len(allOutputs)
+    accuracy = nCorrect/len(allOutputs)
+    print("Accuracy:", accuracy)
+    return accuracy
 
 
 def multipleLearningRates(network, inputData, outputData, iterations, letters, problemName, rates = [0.1, 0.25, 0.5, 0.75, 1, 2]):
@@ -96,14 +97,16 @@ def multipleLearningRates(network, inputData, outputData, iterations, letters, p
     (trainTarget, testTarget) = outputData
     
     errorByLearningRate = {}
+    accuracyByLearningRate = {}
     for learningRate in rates:
         iterationError = []
+        iterationAccuracy = []
         network.reset()
         network.setLearningRate(learningRate)
         print("Learning rate:", learningRate)
         for i in range(0, iterations):
             logging.info("--------------- Iteration " + str(i) + " | Input size: " + str(len(trainData)) + " ---------------")
-            if i < 10:
+            if letters and i < 10:
                 network.setLearningRate(0.5)
             else:
                 network.setLearningRate(learningRate)
@@ -111,25 +114,34 @@ def multipleLearningRates(network, inputData, outputData, iterations, letters, p
             (allOutputs, totalError) = network.test(testData, testTarget, printOutput=False)
 
             # If the problem is letters, print accuracy
-            if letters and not printLossLetters:
+            if letters:
                 accuracy = getLetterAccuracy(allOutputs, testTarget)
-                print("Accuracy:", accuracy)
-                totalError = accuracy
+                iterationAccuracy.append(accuracy)
 
             if np.isnan(error):
                 iterationError = []
+                iterationAccuracy = []
                 break
             else:
                 iterationError.append(totalError)
 
         if len(iterationError) != 0:
             errorByLearningRate[learningRate] = iterationError
+            accuracyByLearningRate[learningRate] = iterationAccuracy
     
+    # Print loss
     plotError(errorByLearningRate, network.getLayersDescription(), 
-              network.getLayersDescriptionSimple(), problemName, letters)
+              network.getLayersDescriptionSimple(), problemName, False)
+
+    # If letters, print accuracy too              
+    if letters:
+        problemName = problemName + "accu"
+        plotError(accuracyByLearningRate, network.getLayersDescription(), 
+                network.getLayersDescriptionSimple(), problemName, letters)
+
 
 # Using http://archive.ics.uci.edu/ml/datasets/Letter+Recognition
-def trainLetterRecognition(single=False):
+def trainLetterRecognition(plot=False):
     training = []
     trainingTarget = []
     test = []
@@ -141,18 +153,18 @@ def trainLetterRecognition(single=False):
     testTarget = np.array(testTarget)
 
     # Setting up the network, 16 input units for the 16 given features
-    hiddenLayer = Layer.Layer(16, 50)
-    hiddenLayer2 = Layer.Layer(50, 50)
-    hiddenLayer3 = Layer.Layer(50, 50)
+    hiddenLayer = Layer.Layer(16, 30, smaller=True)
+    hiddenLayer2 = Layer.Layer(30, 30, smaller=True)
+    # hiddenLayer3 = Layer.Layer(50, 50)
     # 26 outputs for each of the alphabet letters
-    outputLayer = Layer.Layer(50, 26)
+    outputLayer = Layer.Layer(30, 26, smaller=True)
 
-    network = Network.Network([hiddenLayer, hiddenLayer2, hiddenLayer3, outputLayer], learningRate=0.07)
+    network = Network.Network([hiddenLayer, hiddenLayer2, outputLayer], learningRate=0.07)
     network.printNetworkInfo()
     inputData = (training, test)
     outputData = (trainingTarget, testTarget)
-    if not single:
-        multipleLearningRates(network, inputData, outputData, 2, True, "letters", rates=[0.1]) #rates=[0.1, 0.05, 0.01]
+    if plot:
+        multipleLearningRates(network, inputData, outputData, 1000, True, "letters", rates=[0.01, 0.1, 0.2, 0.5, 0.75, 1]) #rates=[0.1, 0.05, 0.01]
     else:
         rates = [0.01]
         globalStart = time.time()
@@ -166,13 +178,12 @@ def trainLetterRecognition(single=False):
             else:
                 learningRate = rates[-1]
             network.setLearningRate(learningRate)
-            if i < 10:
+            if i < 5:
                 network.setLearningRate(0.5)
             network.train(training, trainingTarget) 
 
             (allOutputs, totalError) = network.test(test, testTarget, printOutput=False)
             accuracy = getLetterAccuracy(allOutputs, testTarget, False)
-            print("Accuracy:", accuracy)
             totalError = accuracy
         
             if np.isnan(totalError):
@@ -184,17 +195,18 @@ def trainLetterRecognition(single=False):
             end = time.time()
             print("Finished iteration with time:", (end - start)/60, "minutes")
 
-        accuracy = getLetterAccuracy(allOutputs, testTarget, True)
+        accuracy = getLetterAccuracy(allOutputs, testTarget, False)
         if len(iterationError) != 0:
             errorByLearningRate[learningRate] = iterationError
-        plotError(errorByLearningRate, True)
+        plotError(errorByLearningRate, network.getLayersDescription(), 
+              network.getLayersDescriptionSimple(), "letters", True)
 
         globalEnd = time.time()
         print("Finished training with time:", (globalEnd - globalStart)/60, "minutes") 
 
-def trainXOR(single=False):
-    hiddenLayer = Layer.Layer(2, 7)
-    outputLayer = Layer.Layer(7, 1)
+def trainXOR(plot=False):
+    hiddenLayer = Layer.Layer(2, 4)
+    outputLayer = Layer.Layer(4, 1)
     network = Network.Network([hiddenLayer, outputLayer], learningRate=0.95)
     network.printNetworkInfo()
 
@@ -205,15 +217,15 @@ def trainXOR(single=False):
     allInput = (inputData, inputData)
     allOutput = (desiredOutput, desiredOutput)
 
-    if single:
-        for i in range(0, 3000):
+    if not plot:
+        for i in range(0, 5000):
             error = network.train(inputData, desiredOutput)
             (allOutputs, totalError) = network.test(inputData, desiredOutput, printOutput=True)
             print("-------------------")
     else:
         multipleLearningRates(network, allInput, allOutput, 5000, False, "xor", rates=[0.01, 0.25, 0.5, 0.75, 1])
 
-def trainSinus(single=False):
+def trainSinus(plot=False):
     trainData = []
     target = []
     testData = []
@@ -243,7 +255,7 @@ def trainSinus(single=False):
     outputLayer = Layer.Layer(7, 1, activation=Neuron.Same())
 
     network = Network.Network([hiddenLayer, outputLayer])
-    if single:
+    if not plot:
         for i in range(0, 500):
             print("--------- Iteration", i, "----------")
             error = network.train(trainData, target)
@@ -254,7 +266,8 @@ def trainSinus(single=False):
         multipleLearningRates(network, (trainData, testData), (target, testTarget), 1000, False, "sin", rates = [0.001, 0.01, 0.1, 0.2, 0.3,0.5,0.75,1])
 
 def printUsage():
-    print("Usage: python3 main.py [--debug] [xor/sin/letters (single)] ")
+    print("Usage: python3 main.py [--debug] [xor/sin/letters (plot)] ")
+    exit()
 
 def main(args):
     # Decide which problem to execute and debugging level. Simple "parser"
@@ -265,18 +278,20 @@ def main(args):
         else:
             problem = args[1]
         if len(args) >= 3:
-            single = args[2]
-            if single == 'single':
-                single = True
+            plot = args[2]
+            if plot == 'plot':
+                plot = True
+            else:
+                printUsage()
         else:
-            single = False
+            plot = False
 
         if problem == 'xor':
-            trainXOR(single)
+            trainXOR(plot)
         elif problem == 'sin':
-            trainSinus(single)
+            trainSinus(plot)
         elif problem == 'letters':
-            trainLetterRecognition(single)
+            trainLetterRecognition(plot)
         else:
             printUsage()
     else:

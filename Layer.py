@@ -3,7 +3,7 @@ import numpy as np
 import Neuron
 
 class Layer:
-    def __init__(self, inputSize, size, activation = Neuron.Sigmoid()):
+    def __init__(self, inputSize, size, smaller=False, activation = Neuron.Sigmoid()):
         """Layer constructor, creates the appropriate weight
         and bias matrices based on the layer size and expected
         input size
@@ -16,7 +16,11 @@ class Layer:
         self.inputSize = inputSize
         self.size = size
         self.neurons = []
-        self.activation = activation 
+        self.activation = activation
+        if smaller:
+            self.weightFactor = 0.1
+        else:
+            self.weightFactor = 1
 
         ### TODO: The neuron instances are not really used, the act. function 
         # is simply called in the feedforward method
@@ -37,13 +41,14 @@ class Layer:
         # Random initial weights and biases
         np.random.seed(0)
         # self.weights = (np.random.rand(self.inputSize, self.size) - 0.5) *0.1
-        self.weights = np.random.rand(self.inputSize, self.size)*np.sqrt(1/self.inputSize)
+        self.weights = np.random.rand(self.inputSize, self.size)*np.sqrt(1/self.inputSize)*self.weightFactor
         # print(self.weights)
         # exit()
-        # np.random.seed(0)
+        np.random.seed(0)
         # self.biases = (np.random.rand(1, self.size) - 0.5) *0.25 #np.zeros(size=(1, self.size)) #(np.random.rand(1, self.size) - 0.5) *0.25
         # self.biases = self.biases - self.biases + 0.1
-        self.biases = np.zeros(shape=(1, self.size)) 
+        self.biases = np.random.rand(1, self.size)*np.sqrt(1/self.inputSize)*self.weightFactor
+        # self.biases = np.zeros(shape=(1, self.size))  + 0.1
 
     def reset(self):
         self.setRandomWeights()
