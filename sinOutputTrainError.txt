@@ -1,0 +1,754 @@
+--------- Iteration 0 ----------
+Testing with input size: 100
+Averaged cost: 0.05823180028605228
+--------- Iteration 1 ----------
+Testing with input size: 100
+Averaged cost: 0.018503725653601366
+--------- Iteration 2 ----------
+Testing with input size: 100
+Averaged cost: 0.008267553839970297
+--------- Iteration 3 ----------
+Testing with input size: 100
+Averaged cost: 0.006402838084682389
+--------- Iteration 4 ----------
+Testing with input size: 100
+Averaged cost: 0.006143334951942922
+--------- Iteration 5 ----------
+Testing with input size: 100
+Averaged cost: 0.006057762962325225
+--------- Iteration 6 ----------
+Testing with input size: 100
+Averaged cost: 0.005891749031851269
+--------- Iteration 7 ----------
+Testing with input size: 100
+Averaged cost: 0.005658986255341183
+--------- Iteration 8 ----------
+Testing with input size: 100
+Averaged cost: 0.0054071697655693005
+--------- Iteration 9 ----------
+Testing with input size: 100
+Averaged cost: 0.005142424842773545
+--------- Iteration 10 ----------
+Testing with input size: 100
+Averaged cost: 0.004856874296931436
+--------- Iteration 11 ----------
+Testing with input size: 100
+Averaged cost: 0.004551557686884756
+--------- Iteration 12 ----------
+Testing with input size: 100
+Averaged cost: 0.00423328830824679
+--------- Iteration 13 ----------
+Testing with input size: 100
+Averaged cost: 0.003910009251423256
+--------- Iteration 14 ----------
+Testing with input size: 100
+Averaged cost: 0.003589193476439987
+--------- Iteration 15 ----------
+Testing with input size: 100
+Averaged cost: 0.0032772759946421825
+--------- Iteration 16 ----------
+Testing with input size: 100
+Averaged cost: 0.002979361941487774
+--------- Iteration 17 ----------
+Testing with input size: 100
+Averaged cost: 0.0026991270426429113
+--------- Iteration 18 ----------
+Testing with input size: 100
+Averaged cost: 0.0024388845551739534
+--------- Iteration 19 ----------
+Testing with input size: 100
+Averaged cost: 0.00219976526871134
+--------- Iteration 20 ----------
+Testing with input size: 100
+Averaged cost: 0.001981952301140474
+--------- Iteration 21 ----------
+Testing with input size: 100
+Averaged cost: 0.0017849240945162147
+--------- Iteration 22 ----------
+Testing with input size: 100
+Averaged cost: 0.0016076755208023206
+--------- Iteration 23 ----------
+Testing with input size: 100
+Averaged cost: 0.0014489020148055543
+--------- Iteration 24 ----------
+Testing with input size: 100
+Averaged cost: 0.0013071426171710984
+--------- Iteration 25 ----------
+Testing with input size: 100
+Averaged cost: 0.0011808845043010034
+--------- Iteration 26 ----------
+Testing with input size: 100
+Averaged cost: 0.001068634868235515
+--------- Iteration 27 ----------
+Testing with input size: 100
+Averaged cost: 0.0009689670040781537
+--------- Iteration 28 ----------
+Testing with input size: 100
+Averaged cost: 0.000880547130886961
+--------- Iteration 29 ----------
+Testing with input size: 100
+Averaged cost: 0.0008021475111626782
+--------- Iteration 30 ----------
+Testing with input size: 100
+Averaged cost: 0.0007326502861210424
+--------- Iteration 31 ----------
+Testing with input size: 100
+Averaged cost: 0.0006710453531514051
+--------- Iteration 32 ----------
+Testing with input size: 100
+Averaged cost: 0.0006164246880897193
+--------- Iteration 33 ----------
+Testing with input size: 100
+Averaged cost: 0.0005679747868821905
+--------- Iteration 34 ----------
+Testing with input size: 100
+Averaged cost: 0.0005249683552207152
+--------- Iteration 35 ----------
+Testing with input size: 100
+Averaged cost: 0.00048675597951690114
+--------- Iteration 36 ----------
+Testing with input size: 100
+Averaged cost: 0.00045275823329050567
+--------- Iteration 37 ----------
+Testing with input size: 100
+Averaged cost: 0.0004224584781051391
+--------- Iteration 38 ----------
+Testing with input size: 100
+Averaged cost: 0.0003953964819922827
+--------- Iteration 39 ----------
+Testing with input size: 100
+Averaged cost: 0.0003711628818003185
+--------- Iteration 40 ----------
+Testing with input size: 100
+Averaged cost: 0.00034939444612577044
+--------- Iteration 41 ----------
+Testing with input size: 100
+Averaged cost: 0.00032977004471526703
+--------- Iteration 42 ----------
+Testing with input size: 100
+Averaged cost: 0.0003120071949005534
+--------- Iteration 43 ----------
+Testing with input size: 100
+Averaged cost: 0.00029585903505305355
+--------- Iteration 44 ----------
+Testing with input size: 100
+Averaged cost: 0.0002811115699520679
+--------- Iteration 45 ----------
+Testing with input size: 100
+Averaged cost: 0.0002675810440330154
+--------- Iteration 46 ----------
+Testing with input size: 100
+Averaged cost: 0.0002551113250571905
+--------- Iteration 47 ----------
+Testing with input size: 100
+Averaged cost: 0.00024357121996738615
+--------- Iteration 48 ----------
+Testing with input size: 100
+Averaged cost: 0.00023285169138529793
+--------- Iteration 49 ----------
+Testing with input size: 100
+Averaged cost: 0.00022286299050367235
+--------- Iteration 50 ----------
+Testing with input size: 100
+Averaged cost: 0.00021353176277223604
+--------- Iteration 51 ----------
+Testing with input size: 100
+Averaged cost: 0.00020479821067904123
+--------- Iteration 52 ----------
+Testing with input size: 100
+Averaged cost: 0.0001966134095131928
+--------- Iteration 53 ----------
+Testing with input size: 100
+Averaged cost: 0.00018893686691583437
+--------- Iteration 54 ----------
+Testing with input size: 100
+Averaged cost: 0.00018173439805028427
+--------- Iteration 55 ----------
+Testing with input size: 100
+Averaged cost: 0.0001749763603189094
+--------- Iteration 56 ----------
+Testing with input size: 100
+Averaged cost: 0.0001686362605801599
+--------- Iteration 57 ----------
+Testing with input size: 100
+Averaged cost: 0.0001626897191443719
+--------- Iteration 58 ----------
+Testing with input size: 100
+Averaged cost: 0.00015711375235718362
+--------- Iteration 59 ----------
+Testing with input size: 100
+Averaged cost: 0.00015188632128388643
+--------- Iteration 60 ----------
+Testing with input size: 100
+Averaged cost: 0.00014698608802164135
+--------- Iteration 61 ----------
+Testing with input size: 100
+Averaged cost: 0.0001423923222436526
+--------- Iteration 62 ----------
+Testing with input size: 100
+Averaged cost: 0.0001380849067217942
+--------- Iteration 63 ----------
+Testing with input size: 100
+Averaged cost: 0.00013404439961432096
+--------- Iteration 64 ----------
+Testing with input size: 100
+Averaged cost: 0.00013025212133648106
+--------- Iteration 65 ----------
+Testing with input size: 100
+Averaged cost: 0.00012669024343478047
+--------- Iteration 66 ----------
+Testing with input size: 100
+Averaged cost: 0.00012334186517653868
+--------- Iteration 67 ----------
+Testing with input size: 100
+Averaged cost: 0.00012019107015270907
+--------- Iteration 68 ----------
+Testing with input size: 100
+Averaged cost: 0.00011722296002034322
+--------- Iteration 69 ----------
+Testing with input size: 100
+Averaged cost: 0.00011442366576922234
+--------- Iteration 70 ----------
+Testing with input size: 100
+Averaged cost: 0.00011178033886647182
+--------- Iteration 71 ----------
+Testing with input size: 100
+Averaged cost: 0.00010928112563508294
+--------- Iteration 72 ----------
+Testing with input size: 100
+Averaged cost: 0.00010691512854447
+--------- Iteration 73 ----------
+Testing with input size: 100
+Averaged cost: 0.00010467235797869218
+--------- Iteration 74 ----------
+Testing with input size: 100
+Averaged cost: 0.00010254367768539112
+--------- Iteration 75 ----------
+Testing with input size: 100
+Averaged cost: 0.00010052074662469595
+--------- Iteration 76 ----------
+Testing with input size: 100
+Averaged cost: 9.859595942690527e-05
+--------- Iteration 77 ----------
+Testing with input size: 100
+Averaged cost: 9.676238717835168e-05
+--------- Iteration 78 ----------
+Testing with input size: 100
+Averaged cost: 9.501371981627517e-05
+--------- Iteration 79 ----------
+Testing with input size: 100
+Averaged cost: 9.334421104282947e-05
+--------- Iteration 80 ----------
+Testing with input size: 100
+Averaged cost: 9.174862636166652e-05
+--------- Iteration 81 ----------
+Testing with input size: 100
+Averaged cost: 9.022219459617297e-05
+--------- Iteration 82 ----------
+Testing with input size: 100
+Averaged cost: 8.876056306202636e-05
+--------- Iteration 83 ----------
+Testing with input size: 100
+Averaged cost: 8.735975642330517e-05
+--------- Iteration 84 ----------
+Testing with input size: 100
+Averaged cost: 8.601613916099766e-05
+--------- Iteration 85 ----------
+Testing with input size: 100
+Averaged cost: 8.472638150957311e-05
+--------- Iteration 86 ----------
+Testing with input size: 100
+Averaged cost: 8.348742867195208e-05
+--------- Iteration 87 ----------
+Testing with input size: 100
+Averaged cost: 8.229647309348001e-05
+--------- Iteration 88 ----------
+Testing with input size: 100
+Averaged cost: 8.115092956332575e-05
+--------- Iteration 89 ----------
+Testing with input size: 100
+Averaged cost: 8.004841290618967e-05
+--------- Iteration 90 ----------
+Testing with input size: 100
+Averaged cost: 7.898671803293395e-05
+--------- Iteration 91 ----------
+Testing with input size: 100
+Averaged cost: 7.796380212608883e-05
+--------- Iteration 92 ----------
+Testing with input size: 100
+Averaged cost: 7.697776874933633e-05
+--------- Iteration 93 ----------
+Testing with input size: 100
+Averaged cost: 7.602685368447938e-05
+--------- Iteration 94 ----------
+Testing with input size: 100
+Averaged cost: 7.51094123131544e-05
+--------- Iteration 95 ----------
+Testing with input size: 100
+Averaged cost: 7.422390837784809e-05
+--------- Iteration 96 ----------
+Testing with input size: 100
+Averaged cost: 7.336890397091473e-05
+--------- Iteration 97 ----------
+Testing with input size: 100
+Averaged cost: 7.254305061485072e-05
+--------- Iteration 98 ----------
+Testing with input size: 100
+Averaged cost: 7.174508131124933e-05
+--------- Iteration 99 ----------
+Testing with input size: 100
+Averaged cost: 7.097380344855833e-05
+--------- Iteration 100 ----------
+Testing with input size: 100
+Averaged cost: 7.022809247083885e-05
+--------- Iteration 101 ----------
+Testing with input size: 100
+Averaged cost: 6.950688621969645e-05
+--------- Iteration 102 ----------
+Testing with input size: 100
+Averaged cost: 6.880917987260077e-05
+--------- Iteration 103 ----------
+Testing with input size: 100
+Averaged cost: 6.813402140861759e-05
+--------- Iteration 104 ----------
+Testing with input size: 100
+Averaged cost: 6.748050754089757e-05
+--------- Iteration 105 ----------
+Testing with input size: 100
+Averaged cost: 6.68477800626257e-05
+--------- Iteration 106 ----------
+Testing with input size: 100
+Averaged cost: 6.62350225587832e-05
+--------- Iteration 107 ----------
+Testing with input size: 100
+Averaged cost: 6.564145744238099e-05
+--------- Iteration 108 ----------
+Testing with input size: 100
+Averaged cost: 6.506634327799939e-05
+--------- Iteration 109 ----------
+Testing with input size: 100
+Averaged cost: 6.450897236101316e-05
+--------- Iteration 110 ----------
+Testing with input size: 100
+Averaged cost: 6.396866852316401e-05
+--------- Iteration 111 ----------
+Testing with input size: 100
+Averaged cost: 6.344478514005754e-05
+--------- Iteration 112 ----------
+Testing with input size: 100
+Averaged cost: 6.293670331818765e-05
+--------- Iteration 113 ----------
+Testing with input size: 100
+Averaged cost: 6.244383024197281e-05
+--------- Iteration 114 ----------
+Testing with input size: 100
+Averaged cost: 6.196559766397203e-05
+--------- Iteration 115 ----------
+Testing with input size: 100
+Averaged cost: 6.150146052255678e-05
+--------- Iteration 116 ----------
+Testing with input size: 100
+Averaged cost: 6.10508956743547e-05
+--------- Iteration 117 ----------
+Testing with input size: 100
+Averaged cost: 6.061340072892154e-05
+--------- Iteration 118 ----------
+Testing with input size: 100
+Averaged cost: 6.018849297582119e-05
+--------- Iteration 119 ----------
+Testing with input size: 100
+Averaged cost: 5.977570839445431e-05
+--------- Iteration 120 ----------
+Testing with input size: 100
+Averaged cost: 5.9374600738412714e-05
+--------- Iteration 121 ----------
+Testing with input size: 100
+Averaged cost: 5.898474068724001e-05
+--------- Iteration 122 ----------
+Testing with input size: 100
+Averaged cost: 5.860571505901299e-05
+--------- Iteration 123 ----------
+Testing with input size: 100
+Averaged cost: 5.8237126077933485e-05
+--------- Iteration 124 ----------
+Testing with input size: 100
+Averaged cost: 5.7878590691543324e-05
+--------- Iteration 125 ----------
+Testing with input size: 100
+Averaged cost: 5.7529739933535664e-05
+--------- Iteration 126 ----------
+Testing with input size: 100
+Averaged cost: 5.719021832738348e-05
+--------- Iteration 127 ----------
+Testing with input size: 100
+Averaged cost: 5.685968332745585e-05
+--------- Iteration 128 ----------
+Testing with input size: 100
+Averaged cost: 5.653780479408675e-05
+--------- Iteration 129 ----------
+Testing with input size: 100
+Averaged cost: 5.622426449985442e-05
+--------- Iteration 130 ----------
+Testing with input size: 100
+Averaged cost: 5.591875566411725e-05
+--------- Iteration 131 ----------
+Testing with input size: 100
+Averaged cost: 5.562098251365315e-05
+--------- Iteration 132 ----------
+Testing with input size: 100
+Averaged cost: 5.533065986690629e-05
+--------- Iteration 133 ----------
+Testing with input size: 100
+Averaged cost: 5.5047512740182117e-05
+--------- Iteration 134 ----------
+Testing with input size: 100
+Averaged cost: 5.477127597382526e-05
+--------- Iteration 135 ----------
+Testing with input size: 100
+Averaged cost: 5.450169387680401e-05
+--------- Iteration 136 ----------
+Testing with input size: 100
+Averaged cost: 5.4238519888382634e-05
+--------- Iteration 137 ----------
+Testing with input size: 100
+Averaged cost: 5.3981516255382394e-05
+--------- Iteration 138 ----------
+Testing with input size: 100
+Averaged cost: 5.373045372382758e-05
+--------- Iteration 139 ----------
+Testing with input size: 100
+Averaged cost: 5.348511124430736e-05
+--------- Iteration 140 ----------
+Testing with input size: 100
+Averaged cost: 5.3245275689477916e-05
+--------- Iteration 141 ----------
+Testing with input size: 100
+Averaged cost: 5.301074158338437e-05
+--------- Iteration 142 ----------
+Testing with input size: 100
+Averaged cost: 5.2781310841252133e-05
+--------- Iteration 143 ----------
+Testing with input size: 100
+Averaged cost: 5.255679251969036e-05
+--------- Iteration 144 ----------
+Testing with input size: 100
+Averaged cost: 5.233700257610085e-05
+--------- Iteration 145 ----------
+Testing with input size: 100
+Averaged cost: 5.212176363691331e-05
+--------- Iteration 146 ----------
+Testing with input size: 100
+Averaged cost: 5.1910904774171406e-05
+--------- Iteration 147 ----------
+Testing with input size: 100
+Averaged cost: 5.170426129003224e-05
+--------- Iteration 148 ----------
+Testing with input size: 100
+Averaged cost: 5.1501674508294454e-05
+--------- Iteration 149 ----------
+Testing with input size: 100
+Averaged cost: 5.130299157347243e-05
+--------- Iteration 150 ----------
+Testing with input size: 100
+Averaged cost: 5.110806525584561e-05
+--------- Iteration 151 ----------
+Testing with input size: 100
+Averaged cost: 5.0916753763359954e-05
+--------- Iteration 152 ----------
+Testing with input size: 100
+Averaged cost: 5.072892055936557e-05
+--------- Iteration 153 ----------
+Testing with input size: 100
+Averaged cost: 5.054443418583362e-05
+--------- Iteration 154 ----------
+Testing with input size: 100
+Averaged cost: 5.036316809259529e-05
+--------- Iteration 155 ----------
+Testing with input size: 100
+Averaged cost: 5.018500047142686e-05
+--------- Iteration 156 ----------
+Testing with input size: 100
+Averaged cost: 5.000981409537061e-05
+--------- Iteration 157 ----------
+Testing with input size: 100
+Averaged cost: 4.983749616299049e-05
+--------- Iteration 158 ----------
+Testing with input size: 100
+Averaged cost: 4.9667938147252236e-05
+--------- Iteration 159 ----------
+Testing with input size: 100
+Averaged cost: 4.95010356492279e-05
+--------- Iteration 160 ----------
+Testing with input size: 100
+Averaged cost: 4.933668825568335e-05
+--------- Iteration 161 ----------
+Testing with input size: 100
+Averaged cost: 4.9174799401659886e-05
+--------- Iteration 162 ----------
+Testing with input size: 100
+Averaged cost: 4.901527623654513e-05
+--------- Iteration 163 ----------
+Testing with input size: 100
+Averaged cost: 4.8858029494665166e-05
+--------- Iteration 164 ----------
+Testing with input size: 100
+Averaged cost: 4.870297336951903e-05
+--------- Iteration 165 ----------
+Testing with input size: 100
+Averaged cost: 4.8550025392044384e-05
+--------- Iteration 166 ----------
+Testing with input size: 100
+Averaged cost: 4.839910631240979e-05
+--------- Iteration 167 ----------
+Testing with input size: 100
+Averaged cost: 4.825013998548249e-05
+--------- Iteration 168 ----------
+Testing with input size: 100
+Averaged cost: 4.810305326007625e-05
+--------- Iteration 169 ----------
+Testing with input size: 100
+Averaged cost: 4.7957775871158006e-05
+--------- Iteration 170 ----------
+Testing with input size: 100
+Averaged cost: 4.781424033578826e-05
+--------- Iteration 171 ----------
+Testing with input size: 100
+Averaged cost: 4.7672381852275935e-05
+--------- Iteration 172 ----------
+Testing with input size: 100
+Averaged cost: 4.75321382025436e-05
+--------- Iteration 173 ----------
+Testing with input size: 100
+Averaged cost: 4.7393449657252044e-05
+--------- Iteration 174 ----------
+Testing with input size: 100
+Averaged cost: 4.725625888457156e-05
+--------- Iteration 175 ----------
+Testing with input size: 100
+Averaged cost: 4.712051086142373e-05
+--------- Iteration 176 ----------
+Testing with input size: 100
+Averaged cost: 4.698615278766984e-05
+--------- Iteration 177 ----------
+Testing with input size: 100
+Averaged cost: 4.685313400350802e-05
+--------- Iteration 178 ----------
+Testing with input size: 100
+Averaged cost: 4.672140590901617e-05
+--------- Iteration 179 ----------
+Testing with input size: 100
+Averaged cost: 4.659092188684675e-05
+--------- Iteration 180 ----------
+Testing with input size: 100
+Averaged cost: 4.6461637227207634e-05
+--------- Iteration 181 ----------
+Testing with input size: 100
+Averaged cost: 4.633350905559399e-05
+--------- Iteration 182 ----------
+Testing with input size: 100
+Averaged cost: 4.6206496262813786e-05
+--------- Iteration 183 ----------
+Testing with input size: 100
+Averaged cost: 4.6080559437497906e-05
+--------- Iteration 184 ----------
+Testing with input size: 100
+Averaged cost: 4.595566080092813e-05
+--------- Iteration 185 ----------
+Testing with input size: 100
+Averaged cost: 4.583176414410225e-05
+--------- Iteration 186 ----------
+Testing with input size: 100
+Averaged cost: 4.57088347670055e-05
+--------- Iteration 187 ----------
+Testing with input size: 100
+Averaged cost: 4.558683942002639e-05
+--------- Iteration 188 ----------
+Testing with input size: 100
+Averaged cost: 4.5465746247492544e-05
+--------- Iteration 189 ----------
+Testing with input size: 100
+Averaged cost: 4.534552473308032e-05
+--------- Iteration 190 ----------
+Testing with input size: 100
+Averaged cost: 4.522614564727183e-05
+--------- Iteration 191 ----------
+Testing with input size: 100
+Averaged cost: 4.5107580996852307e-05
+--------- Iteration 192 ----------
+Testing with input size: 100
+Averaged cost: 4.4989803975844936e-05
+--------- Iteration 193 ----------
+Testing with input size: 100
+Averaged cost: 4.4872788918649314e-05
+--------- Iteration 194 ----------
+Testing with input size: 100
+Averaged cost: 4.475651125465194e-05
+--------- Iteration 195 ----------
+Testing with input size: 100
+Averaged cost: 4.4640947464615654e-05
+--------- Iteration 196 ----------
+Testing with input size: 100
+Averaged cost: 4.452607503856454e-05
+--------- Iteration 197 ----------
+Testing with input size: 100
+Averaged cost: 4.441187243537466e-05
+--------- Iteration 198 ----------
+Testing with input size: 100
+Averaged cost: 4.429831904384581e-05
+--------- Iteration 199 ----------
+Testing with input size: 100
+Averaged cost: 4.418539514500832e-05
+--------- Iteration 200 ----------
+Testing with input size: 100
+Averaged cost: 4.407308187631483e-05
+--------- Iteration 201 ----------
+Testing with input size: 100
+Averaged cost: 4.396136119669331e-05
+--------- Iteration 202 ----------
+Testing with input size: 100
+Averaged cost: 4.385021585318315e-05
+--------- Iteration 203 ----------
+Testing with input size: 100
+Averaged cost: 4.373962934889546e-05
+--------- Iteration 204 ----------
+Testing with input size: 100
+Averaged cost: 4.362958591204016e-05
+--------- Iteration 205 ----------
+Testing with input size: 100
+Averaged cost: 4.3520070466116385e-05
+--------- Iteration 206 ----------
+Testing with input size: 100
+Averaged cost: 4.3411068601650946e-05
+--------- Iteration 207 ----------
+Testing with input size: 100
+Averaged cost: 4.330256654826551e-05
+--------- Iteration 208 ----------
+Testing with input size: 100
+Averaged cost: 4.3194551148744685e-05
+--------- Iteration 209 ----------
+Testing with input size: 100
+Averaged cost: 4.308700983328008e-05
+--------- Iteration 210 ----------
+Testing with input size: 100
+Averaged cost: 4.2979930595366543e-05
+--------- Iteration 211 ----------
+Testing with input size: 100
+Averaged cost: 4.2873301968189434e-05
+--------- Iteration 212 ----------
+Testing with input size: 100
+Averaged cost: 4.2767113002236494e-05
+--------- Iteration 213 ----------
+Testing with input size: 100
+Averaged cost: 4.2661353243619756e-05
+--------- Iteration 214 ----------
+Testing with input size: 100
+Averaged cost: 4.25560127131882e-05
+--------- Iteration 215 ----------
+Testing with input size: 100
+Averaged cost: 4.2451081886852534e-05
+--------- Iteration 216 ----------
+Testing with input size: 100
+Averaged cost: 4.2346551676158705e-05
+--------- Iteration 217 ----------
+Testing with input size: 100
+Averaged cost: 4.2242413410074904e-05
+--------- Iteration 218 ----------
+Testing with input size: 100
+Averaged cost: 4.213865881716575e-05
+--------- Iteration 219 ----------
+Testing with input size: 100
+Averaged cost: 4.203528000881924e-05
+--------- Iteration 220 ----------
+Testing with input size: 100
+Averaged cost: 4.193226946273284e-05
+--------- Iteration 221 ----------
+Testing with input size: 100
+Averaged cost: 4.182962000752913e-05
+--------- Iteration 222 ----------
+Testing with input size: 100
+Averaged cost: 4.172732480755665e-05
+--------- Iteration 223 ----------
+Testing with input size: 100
+Averaged cost: 4.162537734864629e-05
+--------- Iteration 224 ----------
+Testing with input size: 100
+Averaged cost: 4.152377142411558e-05
+--------- Iteration 225 ----------
+Testing with input size: 100
+Averaged cost: 4.142250112171778e-05
+--------- Iteration 226 ----------
+Testing with input size: 100
+Averaged cost: 4.132156081078372e-05
+--------- Iteration 227 ----------
+Testing with input size: 100
+Averaged cost: 4.1220945129971954e-05
+--------- Iteration 228 ----------
+Testing with input size: 100
+Averaged cost: 4.112064897565949e-05
+--------- Iteration 229 ----------
+Testing with input size: 100
+Averaged cost: 4.10206674907588e-05
+--------- Iteration 230 ----------
+Testing with input size: 100
+Averaged cost: 4.092099605369281e-05
+--------- Iteration 231 ----------
+Testing with input size: 100
+Averaged cost: 4.0821630268286754e-05
+--------- Iteration 232 ----------
+Testing with input size: 100
+Averaged cost: 4.072256595376171e-05
+--------- Iteration 233 ----------
+Testing with input size: 100
+Averaged cost: 4.062379913522518e-05
+--------- Iteration 234 ----------
+Testing with input size: 100
+Averaged cost: 4.052532603456749e-05
+--------- Iteration 235 ----------
+Testing with input size: 100
+Averaged cost: 4.0427143061642446e-05
+--------- Iteration 236 ----------
+Testing with input size: 100
+Averaged cost: 4.0329246805955596e-05
+--------- Iteration 237 ----------
+Testing with input size: 100
+Averaged cost: 4.0231634028608994e-05
+--------- Iteration 238 ----------
+Testing with input size: 100
+Averaged cost: 4.013430165452832e-05
+--------- Iteration 239 ----------
+Testing with input size: 100
+Averaged cost: 4.003724676511351e-05
+--------- Iteration 240 ----------
+Testing with input size: 100
+Averaged cost: 3.994046659115838e-05
+--------- Iteration 241 ----------
+Testing with input size: 100
+Averaged cost: 3.984395850600284e-05
+--------- Iteration 242 ----------
+Testing with input size: 100
+Averaged cost: 3.9747720019015334e-05
+--------- Iteration 243 ----------
+Testing with input size: 100
+Averaged cost: 3.965174876948459e-05
+--------- Iteration 244 ----------
+Testing with input size: 100
+Averaged cost: 3.955604252033386e-05
+--------- Iteration 245 ----------
+Testing with input size: 100
+Averaged cost: 3.9460599152740874e-05
+--------- Iteration 246 ----------
+Testing with input size: 100
+Averaged cost: 3.9365416660332796e-05
+--------- Iteration 247 ----------
+Testing with input size: 100
+Averaged cost: 3.9270493144119014e-05
+--------- Iteration 248 ----------
+Testing with input size: 100
+Averaged cost: 3.917582680732295e-05
+--------- Iteration 249 ----------
+Testing with input size: 100
+Averaged cost: 3.908141595055136e-05
+--------- Iteration 250 ----------
+Testing with input size: 100
+Averaged cost: 3.898725896729476e-05
+--------- Iteration 251 ----------

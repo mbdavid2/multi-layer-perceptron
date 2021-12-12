@@ -193,8 +193,8 @@ class Network:
         return newPartialDeltas
 
     def test(self, inputData, target, printOutput=True):   
-        print('Testing with input size:', len(inputData))
-        print('Running feedforward...')
+        # print('Testing with input size:', len(inputData))
+        # print('Running feedforward...')
         allOutputs = self.feedForward(inputData)
 
         # Compute new error
@@ -206,8 +206,8 @@ class Network:
                 print('Output ' + str(j) + ' ' + str(allOutputs[-1][j]) + ' | Target: ' + str(target[j]))
         
         averagedCost = totalCost/len(inputData)
-        print('Total cost:', totalCost)
-        print('Averaged cost:', averagedCost)
+        # print('Total cost:', totalCost)
+        # print('Averaged cost:', averagedCost)
         return (allOutputs[-1], averagedCost)
 
     
@@ -259,7 +259,7 @@ class Network:
             # print('Cost for last input:', squaredError)
 
         averagedCost = totalCost/len(inputData)
-        logging.info('Total cost during training: ' + str(totalCost))
+        # logging.info('Total cost during training: ' + str(totalCost))
         logging.info('Average cost: ' + str(averagedCost))
         return averagedCost
 
