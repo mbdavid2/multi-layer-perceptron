@@ -40,13 +40,8 @@ class Layer:
     def setRandomWeights(self):
         # Random initial weights and biases
         np.random.seed(0)
-        # self.weights = (np.random.rand(self.inputSize, self.size) - 0.5) *0.1
         self.weights = np.random.rand(self.inputSize, self.size)*np.sqrt(1/self.inputSize)*self.weightFactor
-        # print(self.weights)
-        # exit()
         np.random.seed(0)
-        # self.biases = (np.random.rand(1, self.size) - 0.5) *0.25 #np.zeros(size=(1, self.size)) #(np.random.rand(1, self.size) - 0.5) *0.25
-        # self.biases = self.biases - self.biases + 0.1
         self.biases = np.random.rand(1, self.size)*np.sqrt(1/self.inputSize)*self.weightFactor
         # self.biases = np.zeros(shape=(1, self.size))  + 0.1
 
@@ -85,23 +80,7 @@ class Layer:
 
 
     def forwardPropagation(self, inputData):
-        # print("Input^T:", inputData.T.shape)
-        # print(inputData.T)
-        # print()
-        # print("Input^T shape:", inputData.T.shape)
-        # print("Weights^T: ", self.weights.T.shape)
-        # print(self.weights.T)
-        # print()
-        # print("Biases:", self.biases.shape)
-        # print(self.biases)
-        # print()
-        # print("Rs", np.dot(self.weights.T, inputData.T) + self.biases.T)
-        # np.dot(self.weights.T, inputData.T) + self.biases.T) 
-        # and np.dot(inputData, self.weights) + self.biases are the same
         self.rawOutput = np.dot(self.weights.T ,inputData.T) + self.biases.T
-        # print("Ouput before activation:", self.rawOutput.shape)
-        # print(self.rawOutput)
-        # print()
 
         # Do it directly applying the func to the whole array
         # rather than iterating over each neuron

@@ -28,7 +28,7 @@ class Sigmoid(ActivationFunction):
         return "sig"
 
 
-class Same(ActivationFunction):
+class Identity(ActivationFunction):
     def activate(self, inputValue):
         return inputValue
 
