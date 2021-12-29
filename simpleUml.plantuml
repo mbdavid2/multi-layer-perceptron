@@ -1,0 +1,32 @@
+@startuml
+class Network {
+}
+
+class Layer {
+}
+
+
+Network *-- "*" Layer
+
+Layer *-- "1" ActivationFunction
+
+Network : train()
+Network : test()
+
+
+ActivationFunction : activate(inputValue)
+ActivationFunction : derivative(inputValue)
+
+Tanh : activate(inputValue)
+Tanh : derivative(inputValue)
+
+Identity : activate(inputValue)
+Identity : derivative(inputValue)
+
+Sigmoid : activate(inputValue)
+Sigmoid : derivative(inputValue)
+
+ActivationFunction <|-- Identity
+ActivationFunction <|-- Sigmoid
+ActivationFunction <|-- Tanh
+@enduml
