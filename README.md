@@ -1,4 +1,4 @@
-# Multi-Layer-Perceptron
+# Multi Layer Perceptron
 
 Multi-Layer Perceptron (MLP) Neural Network implemented from scratch with **Python** and **NumPy**. Implemented feed-forward and backpropagation to be able to train using numeric input
 
